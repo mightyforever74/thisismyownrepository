@@ -19,6 +19,15 @@ public class ContactMessageController {
     public ResponseMessage<ContactMessageResponse> save(@RequestBody @Valid ContactMessageRequest contactMessageRequest){
         return contactMessageService.save(contactMessageRequest);
     }
+
+    /**
+     *
+     * @param page number of selected page
+     * @param size size of the page
+     * @param sort
+     * @param type
+     * @return
+     */
     @GetMapping("/getAll")
 public Page<ContactMessageResponse> getAll(
         @RequestParam(value = "page",defaultValue = "0")int page,
@@ -40,6 +49,8 @@ public Page<ContactMessageResponse> searchByEmail(
         return contactMessageService.searchByEmail(email,page,size,sort,type);
         }
 
+
+
         @GetMapping("/searchBySubject")
     public Page<ContactMessageResponse> searchBySubject(
            @RequestParam(value = "subject") String subject,
@@ -47,8 +58,12 @@ public Page<ContactMessageResponse> searchByEmail(
             @RequestParam(value = "size",defaultValue = "10") int size,
             @RequestParam(value = "sort",defaultValue = "date") String sort,
             @RequestParam(value = "type", defaultValue = "desc") String type){
-        return null;
+        return contactMessageService.searchBySubject(subject,page,size,sort,type);
     }
+    //TODO please add more endpoints for
+    // 1 -> DELETE by ID,
+    // 2 -> update (first find the correct contact message according to its ID,
+    // 3 -> getAllMessages as a list.
 
 
 

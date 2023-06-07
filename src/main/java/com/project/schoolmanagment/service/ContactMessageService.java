@@ -67,6 +67,13 @@ public class ContactMessageService {
         return contactMessageRepository.findByEmailEquals(email,pageable).map(this::createResponse);
     }
 
+    public Page<ContactMessageResponse> searchBySubject (String subject,int page, int size, String sort, String type){
+        Pageable pageable= PageRequest.of(page,size,Sort.by(sort).descending());
+        if(Objects.equals(type,"desc")){
+            pageable = PageRequest.of(page,size,Sort.by(sort).descending());
+        }
+        return contactMessageRepository.findBySubjectEquals(subject,pageable).map(this::createResponse);
+    }
     private ContactMessageResponse createResponse(ContactMessage contactMessage){
         return ContactMessageResponse.builder()
                 .name(contactMessage.getName())
