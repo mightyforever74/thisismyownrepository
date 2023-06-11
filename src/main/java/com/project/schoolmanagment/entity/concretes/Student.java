@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 
+
 @Entity
 @Getter
 @Setter
@@ -25,6 +26,7 @@ public class Student extends User {
     private int studentNumber;
 
     private boolean isActive;
+
     @Column(unique = true)
     private String email;
 
@@ -44,13 +46,13 @@ public class Student extends User {
             inverseJoinColumns = @JoinColumn(name = "lesson_program_id"))
 
     private Set<LessonProgram> lessonProgramList;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "meet_student_table",
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "meet_id"))
-    private List<Meet>meetList;
-
+    private List<Meet> meetList;
 
 
 }
