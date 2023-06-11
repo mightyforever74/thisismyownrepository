@@ -18,11 +18,13 @@ import javax.persistence.OneToOne;
 @ToString(callSuper = true)
 public class Teacher extends User {
     // learn cascade types orphanRemoval
-    @OneToOne(mappedBy = "teacher",  cascade = CascadeType.PERSIST,orphanRemoval = true)
 
+    @OneToOne(mappedBy = "teacher",  cascade = CascadeType.PERSIST, orphanRemoval = true)
     private AdvisoryTeacher advisoryTeacher;
+
     @Column(name = "isAdvisor")
     private Boolean isAdvisor;
+
     @Column(unique = true)
     private String email;
 

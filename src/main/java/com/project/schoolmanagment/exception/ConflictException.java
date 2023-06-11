@@ -3,7 +3,8 @@ package com.project.schoolmanagment.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.CONFLICT)
+@ResponseStatus(HttpStatus.CONFLICT)// firlama ihtimali olan ikazin ismi conflict olsun
+
 public class ConflictException extends RuntimeException{
     public ConflictException(String message){
         super(message);

@@ -11,12 +11,17 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("contactMessages")
+@RequestMapping("contactMessages")//GELEN ENDPOINTIN NASIL ISIMLENDIRILECEGINI BELIRLIYORUM
 @RequiredArgsConstructor
 public class ContactMessageController {
+    //SERVIS ILE ILETISIME GECIYORUM
     private final ContactMessageService contactMessageService;
+
+    // SAVE *********************************************************************************************
+
     @PostMapping("/save")
-    public ResponseMessage<ContactMessageResponse> save(@RequestBody @Valid ContactMessageRequest contactMessageRequest){
+    public ResponseMessage<ContactMessageResponse>
+    save(@RequestBody @Valid ContactMessageRequest contactMessageRequest){
         return contactMessageService.save(contactMessageRequest);
     }
 
@@ -28,6 +33,7 @@ public class ContactMessageController {
      * @param type
      * @return
      */
+    //**GETall****************************************************************
     @GetMapping("/getAll")
 public Page<ContactMessageResponse> getAll(
         @RequestParam(value = "page",defaultValue = "0")int page,
@@ -39,6 +45,7 @@ public Page<ContactMessageResponse> getAll(
 
 }
 
+//SEARCHbyemail*********************************************
 @GetMapping("/searchByEmail")
 public Page<ContactMessageResponse> searchByEmail(
         @RequestParam(value = "email") String email,

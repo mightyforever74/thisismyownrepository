@@ -24,13 +24,16 @@ import java.util.Objects;
 public class ContactMessageService {
 
     private final ContactMessageRepository contactMessageRepository;
+    // save()*******************************************************************************
 
     public ResponseMessage<ContactMessageResponse> save(ContactMessageRequest contactMessageRequest){
 
         //it is expected to create one message in a day with the same email
         boolean isSameMessageWithSameEmailForToday =
-                contactMessageRepository.existsByEmailEqualsAndDateEquals(contactMessageRequest.getEmail(), LocalDate.now());
-
+                contactMessageRepository.
+                        existsByEmailEqualsAndDateEquals(
+                                contactMessageRequest.getEmail(), LocalDate.now());
+// bir kullanici bir gun icinde sadece bir defa mesaj gonderebilmesinin saglanmasi
         if(isSameMessageWithSameEmailForToday){
             throw new ConflictException(Messages.ALREADY_SEND_A_MESSAGE_TODAY);
         }

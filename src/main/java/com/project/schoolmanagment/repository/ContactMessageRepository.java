@@ -26,7 +26,8 @@ public interface ContactMessageRepository extends JpaRepository<ContactMessage,L
      * which compares the references of the two objects.
      */
     boolean existsByEmailEqualsAndDateEquals(String email, LocalDate date);
-
+    //data jpa nimetleri
+    // email ve date bilgisi benim veri tabanimda esit olan veri var mi
     boolean existsByEmailAndDate(String email, LocalDate date);
 
     Page<ContactMessage>findByEmailEquals(String email, Pageable pageable);
