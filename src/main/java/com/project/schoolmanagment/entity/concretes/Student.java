@@ -16,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-@ToString
+@ToString(callSuper = true)
 public class Student extends User {
 
     private String motherName;
@@ -30,28 +30,32 @@ public class Student extends User {
     @Column(unique = true)
     private String email;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)//ogrenci kaydedilirken rehber ogretmeni ike kaydedilmeli
-    @JsonIgnore//surekli gitmesini engeller
-    private AdvisoryTeacher advisorTeacher;
-
-    // studentInfo, lessonProgram, meet
+    @ManyToOne
     @JsonIgnore
-    @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)// student silinince infosu da silinsin
+    private AdvisoryTeacher advisoryTeacher;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)
     private List<StudentInfo> studentInfos;
 
+
     @ManyToMany
     @JsonIgnore
-    @JoinTable(name = "student_lessonprogram",
+    @JoinTable(
+            name = "student_lessonprogram",
             joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "lesson_program_id"))
+            inverseJoinColumns = @JoinColumn(name = "lesson_program_id")
+    )
+    private Set<LessonProgram> lessonsProgramList;
 
-    private Set<LessonProgram> lessonProgramList;
 
     @JsonIgnore
     @ManyToMany
-    @JoinTable(name = "meet_student_table",
+    @JoinTable(
+            name = "meet_student_table",
             joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "meet_id"))
+            inverseJoinColumns = @JoinColumn(name = "meet_id")
+    )
     private List<Meet> meetList;
 
 

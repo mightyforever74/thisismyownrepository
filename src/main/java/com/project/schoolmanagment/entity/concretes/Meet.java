@@ -19,40 +19,35 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class Meet implements Serializable {
+public class Meet {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Lesson id;
+    private Long id;
 
-    private Serializable description;
+    private String description;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
     private LocalDate date;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "HH:mm",timezone = "US")
     private LocalTime startTime;
-/*
-    public void main(String[] args) {
-        Duration gap = Duration.ofSeconds(10);
-        gap.
-    }
 
-   */
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "HH:mm",timezone = "US")
     private LocalTime stopTime;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)// birisi kaybedilirsedevam etsin
-    @JsonIgnoreProperties("teacher")//all the needs will be done by the teacher
-    private AdvisoryTeacher advisorTeacher;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JsonIgnoreProperties("teacher")
+    private AdvisoryTeacher advisoryTeacher;
 
-    @ManyToMany(mappedBy = "meetList", fetch = FetchType.EAGER)//!!!
+    @ManyToMany
     @JoinTable(
             name = "meet_student_table",
             joinColumns = @JoinColumn(name = "meet_id"),
-            inverseJoinColumns = @JoinColumn(name = "studebt_id")
+            inverseJoinColumns = @JoinColumn(name = "student_id")
     )
     private List<Student> studentList;
+
 
 
 }

@@ -53,7 +53,7 @@ public class LessonProgram implements Serializable {
     @PreRemove
     private void removeLessProgramFromStudent(){
         teachers.forEach(teacher->teacher.getLessonsProgramList().remove(this));
-        students.forEach(student ->student.getLessonProgramList().remove(this) );
+        students.forEach(student ->student.getLessonsProgramList().remove(this) );
     }
 
 
