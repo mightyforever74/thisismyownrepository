@@ -1,6 +1,7 @@
 package com.project.schoolmanagment;
 
 
+import com.project.schoolmanagment.service.UserRoleService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,10 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SchoolManagementApplication implements CommandLineRunner {
 
 
-    private final UserRoleService userRoleService;
-
-    public SchoolManagementApplication(UserRoleService userRoleService) {
-        this.userRoleService = userRoleService;
+    public  SchoolManagementApplication(UserRoleService userRoleService) {
     }
 
 
@@ -22,6 +20,10 @@ public class SchoolManagementApplication implements CommandLineRunner {
 
     }
 
+    @Override
+    public void run(String... args) throws Exception {
+
+    }
 }
 
 
