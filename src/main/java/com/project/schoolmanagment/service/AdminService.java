@@ -32,17 +32,17 @@ public class AdminService {
 
         checkDoublicate(adminRequest.getUsername(), adminRequest.getSsn(), adminRequest.getPhoneNumber());//duplicasyon cek ettik
 
-        Admin admin=mapAdminRequestToAdmin(adminRequest);// entti mize map ettik
+        Admin admin = mapAdminRequestToAdmin(adminRequest);// entti mize map ettik
 
         admin.setBuilt_in(false);
         //if username is also Admin we are setting built_in prop. to FALSE
 
-        if(Objects.equals(adminRequest.getName(),"Admin")){
+        if (Objects.equals(adminRequest.getName(), "Admin")) {
             admin.setBuilt_in(false);
         }
         admin.setUserRole(userRoleService.getUserRole(RoleType.ADMIN));// rolu set ettik admin olarak
         // we will imlement password encoder
-        Admin savedAdmin=adminRepository.save(admin);
+        Admin savedAdmin = adminRepository.save(admin);
 
         return ResponseMessage.<AdminResponse>builder()
                 .message("Admin Saved")
@@ -51,7 +51,8 @@ public class AdminService {
                 .build();
 
     }
-    private AdminResponse mapAdminToAdminResponse(Admin admin){
+
+    private AdminResponse mapAdminToAdminResponse(Admin admin) {
         return AdminResponse.builder()
                 .userId(admin.getId())
                 .username(admin.getUsername())
@@ -112,5 +113,8 @@ public class AdminService {
         {
 
         }
+    }
+    public long countAllAdmins(){
+        return adminRepository.count();
     }
 }
