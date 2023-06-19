@@ -1,5 +1,6 @@
 package com.project.schoolmanagment.controller;
 
+import com.project.schoolmanagment.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,10 +14,11 @@ import javax.validation.Valid;
 @RequestMapping("admin")
 @RequiredArgsConstructor
 public class AdminController {
-    private final AdminService adminService;
+
+  private final AdminService adminService;
 
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody @Valid AdminRequest adminRequest){
+    public ResponseEntity<?> save (@RequestBody @Valid AdminRequest adminRequest){
         return ResponseEntity.ok(adminService.save(adminRequest));
-    }
+    }*/
 }

@@ -1,8 +1,28 @@
 package com.project.schoolmanagment.utils;
 
 public class Messages {
+
+    private Messages() {
+    }
+
+    public static final String ROLE_NOT_FOUND =
+            "There is no role like that, check the database";
+    public static final String ROLE_ALREADY_EXIST =
+            "Role already exist in DB";
+
+
+    public static final String ALREADY_REGISTER_MESSAGE_USERNAME=
+            "Error: USER with username %s is already registered";
+
+    public static final String ALREADY_REGISTER_MESSAGE_SSN =
+            "Error: User with ssn %s is already registered";
+    public static final String ALREADY_REGISTER_MESSAGE_PHONE_NUMBER =
+            "Error: User with phone number %s is already registered";
+
+
     //CTRL+SHIFT+U
     // butun exception mesajlari burada toplansin
-    public static final String ALREADY_SEND_A_MESSAGE_TODAY ="Error: You have already send a message with this email";
+    public static final String ALREADY_SEND_A_MESSAGE_TODAY =
+            "Error: You have already send a message with this email";
 // final set buyuk yazilir bin defa kullanilacak mesaj bir defa burda yazilir
 }

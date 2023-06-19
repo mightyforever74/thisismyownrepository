@@ -14,8 +14,8 @@ import java.time.LocalDate;
 
 //no one can create class from this
 @MappedSuperclass
-// properities will be used in child classses
-//since we donot have @entity this class is not a table
+// properities will be used in child classes
+//since we do not have @entity this class is not a table
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,13 +29,13 @@ public abstract class User {
 
     private Long id;
     @Column(unique = true)
-    private String userName;
+    private String username;
     @Column(unique = true)
     private String ssn;
     private String name;
     private String surname;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate birthday;
+    private LocalDate birthDay;
     private String birthPlace;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
