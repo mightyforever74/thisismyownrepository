@@ -1,7 +1,6 @@
 package com.project.schoolmanagment.security.jwt;
 
 import com.project.schoolmanagment.security.service.UserDetailsImpl;
-import com.project.schoolmanagment.security.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
