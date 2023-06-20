@@ -25,7 +25,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
-/**
+/*
  * this class is the main configuration class of SECURITY.
  * All implementation will be injected in this class and be used as configuration.
  */
@@ -38,6 +38,7 @@ public class WebSecurityConfig {
     /**
      * this will be our authentication manager
      */
+    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
         throws Exception{
         return configuration.getAuthenticationManager();
