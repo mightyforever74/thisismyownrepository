@@ -1,7 +1,8 @@
-package com.project.schoolmanagment.payload.dto;
+package com.project.schoolmanagment.payload.mappers;
 
 import com.project.schoolmanagment.entity.concretes.Dean;
 import com.project.schoolmanagment.payload.request.DeanRequest;
+import com.project.schoolmanagment.payload.response.DeanResponse;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,18 @@ public class DeanDto {
                 .birthPlace(deanRequest.getBirthPlace())
                 .phoneNumber(deanRequest.getPhoneNumber())
                 .gender(deanRequest.getGender())
+                .build();
+    }
+    public DeanResponse mapDeanToDeanResponse(Dean dean){
+        return DeanResponse.builder()
+                .userId(dean.getId())
+                .username(dean.getUsername())
+                .name(dean.getName())
+                .surname(dean.getSurname())
+                .birthDay(dean.getBirthDay())
+                .birthPlace(dean.getBirthPlace())
+                .gender(dean.getGender())
+                .ssn(dean.getSsn())
                 .build();
     }
 }
