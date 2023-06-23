@@ -1,14 +1,18 @@
 package com.project.schoolmanagment.payload.mappers;
 
 import com.project.schoolmanagment.entity.concretes.Dean;
+import com.project.schoolmanagment.entity.enums.RoleType;
 import com.project.schoolmanagment.payload.request.DeanRequest;
 import com.project.schoolmanagment.payload.response.DeanResponse;
+import com.project.schoolmanagment.service.UserRoleService;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
 @Data
 @Component
 public class DeanDto {
+    private final UserRoleService userRoleService;
+
 
     public Dean mapDeanRequestToDean(DeanRequest deanRequest){
         return Dean.builder()
@@ -33,6 +37,20 @@ public class DeanDto {
                 .birthPlace(dean.getBirthPlace())
                 .gender(dean.getGender())
                 .ssn(dean.getSsn())
+                .build();
+    }
+    public Dean mapDeanRequestToUpdatedDean (DeanRequest deanRequest,Long managerId){
+        return Dean.builder()
+                .id(managerId)
+                .username(deanRequest.getUsername())
+                .ssn(deanRequest.getSsn())
+                .name(deanRequest.getName())
+                .surname(deanRequest.getSurname())
+                .birthPlace(deanRequest.getBirthPlace())
+                .birthDay(deanRequest.getBirthDay())
+                .phoneNumber(deanRequest.getPhoneNumber())
+                .gender(deanRequest.getGender())
+                .userRole(userRoleService.getUserRole(RoleType.MANAGER))
                 .build();
     }
 }

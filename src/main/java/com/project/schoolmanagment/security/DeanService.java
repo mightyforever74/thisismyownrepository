@@ -2,17 +2,22 @@ package com.project.schoolmanagment.security;
 
 import com.project.schoolmanagment.entity.concretes.Dean;
 import com.project.schoolmanagment.entity.enums.RoleType;
+import com.project.schoolmanagment.exception.ResourceNotFoundException;
 import com.project.schoolmanagment.payload.mappers.DeanDto;
 import com.project.schoolmanagment.payload.request.DeanRequest;
 import com.project.schoolmanagment.payload.response.DeanResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.repository.DeanRepository;
 import com.project.schoolmanagment.service.UserRoleService;
+import com.project.schoolmanagment.utils.CheckParameterUpdateMethod;
 import com.project.schoolmanagment.utils.FieldControl;
+import com.project.schoolmanagment.utils.Messages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +44,33 @@ public class DeanService {
                 .build();
     }
 
-}
+    public ResponseMessage<DeanResponse> update(DeanRequest deanRequest, Long deanId) {
+        Optional<Dean> dean = deanRepository.findById(deanId);
+
+        //we are preventing the user to change the username + ssn + phoneNumber
+        if (!dean.isPresent()) {   //DEAN -> DEAN2
+            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, deanId));
+        } else if (!CheckParameterUpdateMethod.checkUniqueProperties(dean.get(), deanRequest)) {
+            fieldControl.checkDuplicate(deanRequest.getUsername(),
+                    deanRequest.getSsn(),
+                    deanRequest.getPhoneNumber());
+        }
+
+        Dean updatedDean = deanDto.mapDeanRequestToUpdatedDean(deanRequest, deanId);
+        updatedDean.setPassword(passwordEncoder.encode(deanRequest.getPassword()));
+        Dean savedDean=deanRepository.save(updatedDean);
+
+        return ResponseMessage.<DeanResponse>builder()
+                .message("Dean updated successfully")
+                .httpStatus(HttpStatus.OK)
+                .object(deanDto.mapDeanToDeanResponse(savedDean))
+                .build();
+    }
+
+    }
+
+
+
+
 
 
