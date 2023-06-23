@@ -13,6 +13,7 @@ public interface StudentRepository extends JpaRepository<Student,Long> {
 
     Student findByUsernameEquals (String username);
 
-   // boolean existsByEmail(String email);
+
+    boolean existsByEmail(String email);
 
 }

@@ -24,6 +24,10 @@ public class Messages {
     public static final String ALREADY_REGISTER_MESSAGE_PHONE_NUMBER =
             "Error: User with phone number %s is already registered";
 
+    public static final String ALREADY_REGISTER_MESSAGE_EMAIL =
+            "Error: User with email %s is already registered";
+
+
 
     //CTRL+SHIFT+U
     // butun exception mesajlari burada toplansin
