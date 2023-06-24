@@ -45,12 +45,10 @@ public class DeanService {
     }
 
     public ResponseMessage<DeanResponse> update(DeanRequest deanRequest, Long deanId) {
-        Optional<Dean> dean = deanRepository.findById(deanId);
+        Optional<Dean> dean = isDeanExist(deanId);
 
         //we are preventing the user to change the username + ssn + phoneNumber
-        if (!dean.isPresent()) {   //DEAN -> DEAN2
-            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, deanId));
-        } else if (!CheckParameterUpdateMethod.checkUniqueProperties(dean.get(), deanRequest)) {
+        if (!CheckParameterUpdateMethod.checkUniqueProperties(dean.get(), deanRequest)) {   //DEAN -> DEAN2
             fieldControl.checkDuplicate(deanRequest.getUsername(),
                     deanRequest.getSsn(),
                     deanRequest.getPhoneNumber());
@@ -58,15 +56,40 @@ public class DeanService {
 
         Dean updatedDean = deanDto.mapDeanRequestToUpdatedDean(deanRequest, deanId);
         updatedDean.setPassword(passwordEncoder.encode(deanRequest.getPassword()));
-        Dean savedDean=deanRepository.save(updatedDean);
+        Dean savedDean = deanRepository.save(updatedDean);
 
         return ResponseMessage.<DeanResponse>builder()
-                .message("Dean updated successfully")
+                .message("Dean Updated Successfully")
                 .httpStatus(HttpStatus.OK)
                 .object(deanDto.mapDeanToDeanResponse(savedDean))
                 .build();
+
     }
 
+    private Optional<Dean> isDeanExist(Long deanId) {
+        Optional<Dean> dean = deanRepository.findById(deanId);
+
+//		Optional<Dean> dean = deanRepository.findById(deanId)
+//				.orElseThrow(()-> new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, deanId)));
+
+        if (!deanRepository.findById(deanId).isPresent()) {
+            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, deanId));
+        } else {
+            return dean;
+        }
+    }
+
+    public ResponseMessage<?> deleteDeanById(Long deanId) {
+
+        isDeanExist(deanId);
+
+        deanRepository.deleteById(deanId);
+
+        return ResponseMessage.builder()
+                .message("Dean deleted")
+                .httpStatus(HttpStatus.OK)
+                .build();
+    }
     }
 
 
