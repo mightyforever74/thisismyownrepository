@@ -1,4 +1,4 @@
-package com.project.schoolmanagment.payload.request;
+package com.project.schoolmanagment.payload.request.abstracts;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.schoolmanagment.entity.enums.Gender;
@@ -20,6 +20,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public abstract class BaseUserRequest {
+
     @NotNull(message = "Please enter your username")
     @Size(min = 4, max = 16,message = "Your username should be at least 4 chars")
     @Pattern(regexp = "\\A(?!\\s*\\Z).+", message = "Your username must consist of the characters .")

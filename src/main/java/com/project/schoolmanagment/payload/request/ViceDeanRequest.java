@@ -10,9 +10,6 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @NoArgsConstructor
 @SuperBuilder
-public class AdminRequest extends BaseUserRequest {
-
-    private boolean builtIn;
-
+public class ViceDeanRequest extends BaseUserRequest {
 
 }

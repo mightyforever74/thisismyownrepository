@@ -23,40 +23,35 @@ public class DeanController {
     private final DeanService deanService;
 
     @PostMapping("/save")
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+
     public ResponseMessage<DeanResponse> save(@RequestBody @Valid DeanRequest deanRequest) {
         return deanService.save(deanRequest);
     }
 
     @PutMapping("/update/{userId}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public ResponseMessage<DeanResponse> update(@RequestBody @Valid DeanRequest deanRequest,
                                                 @PathVariable Long userId) {
         return deanService.update(deanRequest, userId);
     }
 
     @DeleteMapping("/delete/{userId}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public ResponseMessage<?> deleteDeanById(@PathVariable Long userId) {
         return deanService.deleteDeanById(userId);
     }
 
     //TODO HOMEWORK write this delete messega again with requestParam
     @GetMapping("/getManagerById/{userId}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public ResponseMessage<DeanResponse> getDeanById(@PathVariable Long userId) {
         return deanService.getDeanByID(userId);
     }
 
     @GetMapping("/getAll")
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public List<DeanResponse> getAllDeans() {
 
         return deanService.getAllDeans();
     }
 
     @GetMapping("/search")
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public Page<DeanResponse> getAllDeansByPage(
             @RequestParam(value = "page") int page,
             @RequestParam(value = "size") int size,
