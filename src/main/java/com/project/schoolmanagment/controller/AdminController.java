@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,9 +22,9 @@ import java.util.Objects;
 public class AdminController {
 
     private final AdminService adminService;
-
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody @Valid AdminRequest adminRequest) {
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<?>save(@RequestBody @Valid AdminRequest adminRequest){
         return ResponseEntity.ok(adminService.save(adminRequest));
     }
     @GetMapping("/getAll")
