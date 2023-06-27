@@ -1,4 +1,4 @@
-package com.project.schoolmanagment.security;
+package com.project.schoolmanagment.service;
 
 import com.project.schoolmanagment.entity.concretes.Dean;
 import com.project.schoolmanagment.entity.enums.RoleType;
@@ -18,7 +18,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -58,8 +57,8 @@ public class DeanService {
         //we are preventing the user to change the username + ssn + phoneNumber
         if (!CheckParameterUpdateMethod.checkUniqueProperties(dean.get(), deanRequest)) {   //DEAN -> DEAN2
             fieldControl.checkDuplicate(deanRequest.getUsername(),
-                    deanRequest.getSsn(),
-                    deanRequest.getPhoneNumber());
+                                         deanRequest.getSsn(),
+                                           deanRequest.getPhoneNumber());
         }
 
         Dean updatedDean = deanDto.mapDeanRequestToUpdatedDean(deanRequest, deanId);
@@ -116,12 +115,12 @@ public class DeanService {
     }
 
     public Page<DeanResponse> getAllDeansByPage(int page, int size, String sort, String type) {
-        Pageable pageable= PageRequest.of(page, size,Sort.by(sort).ascending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
 
-        if (Objects.equals(type,"desc")){
-            pageable= PageRequest.of(page,size,Sort.by(sort).descending());
+        if (Objects.equals(type, "desc")) {
+            pageable = PageRequest.of(page, size, Sort.by(sort).descending());
         }
-        return  deanRepository.findAll(pageable).map(deanDto::mapDeanToDeanResponse);
+        return deanRepository.findAll(pageable).map(deanDto::mapDeanToDeanResponse);
 
     }
 }

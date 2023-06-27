@@ -51,7 +51,7 @@ public class FieldControl {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, phone));
         } else if (studentRepository.existsByEmail(email) ||
                 teacherRepository.existsByEmail(email))
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_EMAIL , email));
+            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_EMAIL, email));
     }
 }
 
