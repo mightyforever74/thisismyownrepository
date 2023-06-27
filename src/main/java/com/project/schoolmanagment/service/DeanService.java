@@ -8,7 +8,6 @@ import com.project.schoolmanagment.payload.request.DeanRequest;
 import com.project.schoolmanagment.payload.response.DeanResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.repository.DeanRepository;
-import com.project.schoolmanagment.service.UserRoleService;
 import com.project.schoolmanagment.utils.CheckParameterUpdateMethod;
 import com.project.schoolmanagment.utils.FieldControl;
 import com.project.schoolmanagment.utils.Messages;
