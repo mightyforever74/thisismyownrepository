@@ -9,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @NoArgsConstructor
 @SuperBuilder
-public class ViceDeanResponse extends BaseUserResponse{
+public class ViceDeanResponse extends BaseUserResponse {
 
 }
 

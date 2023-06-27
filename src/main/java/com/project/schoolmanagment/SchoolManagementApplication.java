@@ -37,7 +37,7 @@ public class SchoolManagementApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if(userRoleService.getAllUserRole().isEmpty()){
+        if (userRoleService.getAllUserRole().isEmpty()) {
             userRoleService.save(RoleType.ADMIN);
             userRoleService.save(RoleType.MANAGER);
             userRoleService.save(RoleType.ASSISTANT_MANAGER);

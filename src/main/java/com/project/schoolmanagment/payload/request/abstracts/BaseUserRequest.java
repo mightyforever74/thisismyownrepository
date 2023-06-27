@@ -22,17 +22,17 @@ import java.time.LocalDate;
 public abstract class BaseUserRequest {
 
     @NotNull(message = "Please enter your username")
-    @Size(min = 4, max = 16,message = "Your username should be at least 4 chars")
+    @Size(min = 4, max = 16, message = "Your username should be at least 4 chars")
     @Pattern(regexp = "\\A(?!\\s*\\Z).+", message = "Your username must consist of the characters .")
     private String username;
 
     @NotNull(message = "Please enter your name")
-    @Size(min = 4, max = 16,message = "Your name should be at least 4 chars")
+    @Size(min = 4, max = 16, message = "Your name should be at least 4 chars")
     @Pattern(regexp = "\\A(?!\\s*\\Z).+", message = "Your name must consist of the characters .")
     private String name;
 
     @NotNull(message = "Please enter your surname")
-    @Size(min = 4, max = 16,message = "Your surname should be at least 4 chars")
+    @Size(min = 4, max = 16, message = "Your surname should be at least 4 chars")
     @Pattern(regexp = "\\A(?!\\s*\\Z).+", message = "Your surname must consist of the characters .")
     private String surname;
 
@@ -47,18 +47,18 @@ public abstract class BaseUserRequest {
     private String ssn;
 
     @NotNull(message = "Please enter your birthplace")
-    @Size(min = 2, max = 16,message = "Your birthplace should be at least 2 chars")
+    @Size(min = 2, max = 16, message = "Your birthplace should be at least 2 chars")
     @Pattern(regexp = "\\A(?!\\s*\\Z).+", message = "Your birthplace must consist of the characters .")
     private String birthPlace;
 
     @NotNull(message = "Please enter your password")
-    @Size(min = 8, max = 60,message = "Your password should be at least 8 chars or maximum 60 characters")
+    @Size(min = 8, max = 60, message = "Your password should be at least 8 chars or maximum 60 characters")
     //password syntax validation could be a good feature.
     //@Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\\\d)(?=.*[-+_!@#$%^&*., ?]).+$")
     private String password;
 
     @NotNull(message = "Please enter your phone number")
-    @Size(min = 12, max = 12,message = "Your phone number should be 12 characters long")
+    @Size(min = 12, max = 12, message = "Your phone number should be 12 characters long")
     @Pattern(regexp = "^((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$",
             message = "Please enter valid phone number")
     private String phoneNumber;

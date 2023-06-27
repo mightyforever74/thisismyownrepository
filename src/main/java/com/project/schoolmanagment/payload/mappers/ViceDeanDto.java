@@ -14,7 +14,7 @@ public class ViceDeanDto {
 
     private final UserRoleService userRoleService;
 
-    public ViceDean mapViceDeanRequestToViceDean(ViceDeanRequest viceDeanRequest){
+    public ViceDean mapViceDeanRequestToViceDean(ViceDeanRequest viceDeanRequest) {
         return ViceDean.builder()
                 .birthDay(viceDeanRequest.getBirthDay())
                 .username(viceDeanRequest.getUsername())
@@ -27,7 +27,8 @@ public class ViceDeanDto {
                 .gender(viceDeanRequest.getGender())
                 .build();
     }
-    public ViceDeanResponse mapViceDeanToViceDeanResponse(ViceDean viceDean){
+
+    public ViceDeanResponse mapViceDeanToViceDeanResponse(ViceDean viceDean) {
         return ViceDeanResponse.builder()
                 .userId(viceDean.getId())
                 .username(viceDean.getUsername())
@@ -40,7 +41,8 @@ public class ViceDeanDto {
                 .gender(viceDean.getGender())
                 .build();
     }
-    public ViceDean mapViceDeanRequestToUpdatedViceDean(ViceDeanRequest viceDeanRequest,Long viceDeanId){
+
+    public ViceDean mapViceDeanRequestToUpdatedViceDean(ViceDeanRequest viceDeanRequest, Long viceDeanId) {
         return ViceDean.builder()
                 .id(viceDeanId)
                 .username(viceDeanRequest.getUsername())
