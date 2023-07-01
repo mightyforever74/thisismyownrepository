@@ -7,7 +7,7 @@ import com.project.schoolmanagment.payload.request.AdminRequest;
 import com.project.schoolmanagment.payload.response.AdminResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.repository.*;
-import com.project.schoolmanagment.utils.FieldControl;
+import com.project.schoolmanagment.utils.ServiceHelper;
 import com.project.schoolmanagment.utils.Messages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,13 +24,13 @@ public class AdminService {
 
     private final AdminRepository adminRepository;
     private final UserRoleService userRoleService;
-    private final FieldControl fieldControl;
+    private final ServiceHelper serviceHelper;
 
 
     public ResponseMessage save(AdminRequest adminRequest) {
 
 
-        fieldControl.checkDuplicate(adminRequest.getUsername(), adminRequest.getSsn(), adminRequest.getPhoneNumber());//duplicasyon cek ettik
+        serviceHelper.checkDuplicate(adminRequest.getUsername(), adminRequest.getSsn(), adminRequest.getPhoneNumber());//duplicasyon cek ettik
 
         Admin admin = mapAdminRequestToAdmin(adminRequest);
         // entti mize map ettik

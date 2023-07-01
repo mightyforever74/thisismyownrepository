@@ -10,35 +10,37 @@ import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.ViceDeanResponse;
 import com.project.schoolmanagment.repository.ViceDeanRepository;
 import com.project.schoolmanagment.utils.CheckParameterUpdateMethod;
-import com.project.schoolmanagment.utils.FieldControl;
+import com.project.schoolmanagment.utils.ServiceHelper;
 import com.project.schoolmanagment.utils.Messages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ViceDeanService {
+
     private final ViceDeanRepository viceDeanRepository;
-    public final FieldControl fieldControl;
+
+    public final ServiceHelper serviceHelper;
+
     public final ViceDeanDto viceDeanDto;
+
     public final PasswordEncoder passwordEncoder;
+
     public final UserRoleService userRoleService;
 
     public ResponseMessage<ViceDeanResponse> saveViceDean(ViceDeanRequest viceDeanRequest) {
 
-        fieldControl.checkDuplicate(viceDeanRequest.getUsername(),
+        serviceHelper.checkDuplicate(viceDeanRequest.getUsername(),
                 viceDeanRequest.getSsn(),
                 viceDeanRequest.getPhoneNumber());
 
@@ -86,7 +88,7 @@ public class ViceDeanService {
         Optional<ViceDean> viceDean = isViceDeanExist(viceDeanId);
 
         if (CheckParameterUpdateMethod.checkUniqueProperties(viceDean.get(), viceDeanRequest)) {
-            fieldControl.checkDuplicate(viceDeanRequest.getUsername(),
+            serviceHelper.checkDuplicate(viceDeanRequest.getUsername(),
                     viceDeanRequest.getSsn(),
                     viceDeanRequest.getPhoneNumber());
         }
@@ -100,7 +102,8 @@ public class ViceDeanService {
                 .object(viceDeanDto.mapViceDeanToViceDeanResponse(savedViceDean))
                 .build();
     }
-//TODO learn about stream api
+
+    //TODO learn about stream api
     public List<ViceDeanResponse> getAllViceDeans() {
         return viceDeanRepository.findAll()
                 .stream()
@@ -108,13 +111,16 @@ public class ViceDeanService {
                 .collect(Collectors.toList());
 
     }
-    public Page<ViceDeanResponse> getAllViceDeansByPage(int page, int size, String sort, String type){
-        Pageable pageable = PageRequest.of(page,size, Sort.by(sort).ascending());
-        if (Objects.equals(type, "desc")){
-            pageable = PageRequest.of(page,size, Sort.by(sort).descending());
-        }
-        return viceDeanRepository.findAll(pageable).map(viceDeanDto::mapViceDeanToViceDeanResponse);
 
+    public Page<ViceDeanResponse> getAllViceDeansByPage(int page, int size, String sort, String type) {
+        // created a helper method in utils
+       // Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
+  //      if (Objects.equals(type, "desc")) {
+     //       pageable = PageRequest.of(page, size, Sort.by(sort).descending());
+    //    }
+        Pageable pageable= serviceHelper.getPageableWithProperties(page,size,sort,type);
+
+        return viceDeanRepository.findAll(pageable).map(viceDeanDto::mapViceDeanToViceDeanResponse);
 
 
     }

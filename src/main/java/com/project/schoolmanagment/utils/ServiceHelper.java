@@ -3,27 +3,46 @@ package com.project.schoolmanagment.utils;
 import com.project.schoolmanagment.exception.ConflictException;
 import com.project.schoolmanagment.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
-public class FieldControl {
+public class ServiceHelper {
 
     private final AdminRepository adminRepository;
+
     private final DeanRepository deanRepository;
+
     private final ViceDeanRepository viceDeanRepository;
+
     private final StudentRepository studentRepository;
+
     private final TeacherRepository teacherRepository;
+
     private final GuestUserRepository guestUserRepository;
 
-    //admin ,vicedean, student, teacher,guestuser should have unique
-    //username , email, , ssn and phonenumber
+    public Pageable getPageableWithProperties(int page, int size,String sort, String type){
+    Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
+        if (Objects.equals(type, "desc")) {
+            pageable = PageRequest.of(page, size, Sort.by(sort).descending());
+        }
+            return pageable;
+        }
+
+    //admin ,vice dean, student, teacher,guest user should have unique
+    //username , email, , ssn and phone number
 
     public void checkDuplicate(String... values) {
         String username = values[0];
         String ssn = values[1];
         String phone = values[2];
         String email = "";
+
         if (values.length == 4) {
             email = values[3];
         }
