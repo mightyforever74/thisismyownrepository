@@ -44,5 +44,6 @@ public static final String EDUCATION_START_DATE_IS_EARLIER_THAN_LAST_REGISTRATIO
     public static final String EDUCATION_TERM_NOT_FOUND_MESSAGE =
             "Error: Education Term with id %s not found" ;
 
+
     //lesson
 }
