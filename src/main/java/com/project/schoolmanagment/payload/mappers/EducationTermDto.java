@@ -20,6 +20,13 @@ public class EducationTermDto {
                 .build();
 
     }
+    public EducationTerm mapEducationTermRequestToUpdatedEducationTerm(Long id, EducationTermRequest educationTermRequest){
+        return mapEducationTermRequestToEducationTerm(educationTermRequest)
+                .builder()
+                .id(id)
+                .build();
+
+    }
 
     public EducationTermResponse mapEducationTermToEducationTermResponse(EducationTerm educationTerm){
         return EducationTermResponse.builder()

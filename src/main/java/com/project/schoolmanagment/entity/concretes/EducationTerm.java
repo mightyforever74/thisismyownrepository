@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,36 +18,36 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
+public class EducationTerm {
 
-public class EducationTerm implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Education Term must not be empty")
+    @NotNull(message = "Education term must not be empty")
     @Enumerated(EnumType.STRING)
     private Term term;
 
-    @NotNull(message = "Start date must not be empty")
+    @NotNull(message = "Start date must not me empty")
     @Column(name = "start_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate startDate;
 
-    @NotNull(message = "End date must not be empty")
+    @NotNull(message = "End date must not me empty")
     @Column(name = "end_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
-    @NotNull(message = "Last registration  date must not be empty")
+    @NotNull(message = "Last registration date must not me empty")
     @Column(name = "last_registration_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate lastRegistrationDate;
 
-    // lesson program
-    @OneToMany(mappedBy = "educationTerm",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "educationTerm" ,cascade = CascadeType.ALL)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<LessonProgram> lessonProgram;
 
 
-}
 
+
+}

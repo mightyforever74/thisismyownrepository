@@ -12,7 +12,7 @@ import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
-public class ServiceHelper {
+public class ServiceHelpers {
 
     private final AdminRepository adminRepository;
 

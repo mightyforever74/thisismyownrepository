@@ -10,7 +10,7 @@ import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.ViceDeanResponse;
 import com.project.schoolmanagment.repository.ViceDeanRepository;
 import com.project.schoolmanagment.utils.CheckParameterUpdateMethod;
-import com.project.schoolmanagment.utils.ServiceHelper;
+import com.project.schoolmanagment.utils.ServiceHelpers;
 import com.project.schoolmanagment.utils.Messages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,7 +30,7 @@ public class ViceDeanService {
 
     private final ViceDeanRepository viceDeanRepository;
 
-    public final ServiceHelper serviceHelper;
+    public final ServiceHelpers serviceHelpers;
 
     public final ViceDeanDto viceDeanDto;
 
@@ -40,7 +40,7 @@ public class ViceDeanService {
 
     public ResponseMessage<ViceDeanResponse> saveViceDean(ViceDeanRequest viceDeanRequest) {
 
-        serviceHelper.checkDuplicate(viceDeanRequest.getUsername(),
+        serviceHelpers.checkDuplicate(viceDeanRequest.getUsername(),
                 viceDeanRequest.getSsn(),
                 viceDeanRequest.getPhoneNumber());
 
@@ -88,7 +88,7 @@ public class ViceDeanService {
         Optional<ViceDean> viceDean = isViceDeanExist(viceDeanId);
 
         if (CheckParameterUpdateMethod.checkUniqueProperties(viceDean.get(), viceDeanRequest)) {
-            serviceHelper.checkDuplicate(viceDeanRequest.getUsername(),
+            serviceHelpers.checkDuplicate(viceDeanRequest.getUsername(),
                     viceDeanRequest.getSsn(),
                     viceDeanRequest.getPhoneNumber());
         }
@@ -118,7 +118,7 @@ public class ViceDeanService {
   //      if (Objects.equals(type, "desc")) {
      //       pageable = PageRequest.of(page, size, Sort.by(sort).descending());
     //    }
-        Pageable pageable= serviceHelper.getPageableWithProperties(page,size,sort,type);
+        Pageable pageable= serviceHelpers.getPageableWithProperties(page,size,sort,type);
 
         return viceDeanRepository.findAll(pageable).map(viceDeanDto::mapViceDeanToViceDeanResponse);
 

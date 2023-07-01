@@ -28,11 +28,8 @@ public class SchoolManagementApplication implements CommandLineRunner {
         this.passwordEncoder = passwordEncoder;
     }
 
-
     public static void main(String[] args) {
         SpringApplication.run(SchoolManagementApplication.class, args);
-
-
     }
 
     @Override
@@ -60,7 +57,6 @@ public class SchoolManagementApplication implements CommandLineRunner {
             adminRequest.setBirthPlace("Texas");
             adminService.save(adminRequest);
         }
-
 
     }
 }
