@@ -28,8 +28,8 @@ public class EducationTermController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER')")
     @GetMapping("/{id}")
-    public EducationTerm getEducationTermById(@PathVariable Long id) {
-        return educationTermService.getEducationTermById(id);
+    public EducationTermResponse getEducationTermById(@PathVariable Long id) {
+        return educationTermService.getEducationTermResponseById(id);
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER')")
@@ -50,21 +50,21 @@ public class EducationTermController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER')")
     @DeleteMapping("/delete/{id}")
-    public ResponseMessage<?>deleteEducationTermById(@PathVariable Long id){
+    public ResponseMessage<?> deleteEducationTermById(@PathVariable Long id) {
         return educationTermService.deleteEducationTermById(id);
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     @PutMapping("/update/{id}")
-    public ResponseMessage<EducationTermResponse>updateEducationTerm(@PathVariable Long id,
-                                                                     @RequestBody @Valid EducationTermRequest educationTermRequest ){
-        return educationTermService.updateEducationTerm(id,educationTermRequest);
+    public ResponseMessage<EducationTermResponse> updateEducationTerm(@PathVariable Long id,
+                                                                      @RequestBody @Valid EducationTermRequest educationTermRequest) {
+        return educationTermService.updateEducationTerm(id, educationTermRequest);
     }
 
     //TODO homework  please write down a request that gets all education term starts dates later then entered Date
     //  hint - > should be get request with parameter
 
 
-    }
+}
 
 
