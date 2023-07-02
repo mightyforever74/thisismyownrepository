@@ -10,12 +10,12 @@ import com.project.schoolmanagment.repository.LessonRepository;
 import com.project.schoolmanagment.utils.Messages;
 import com.project.schoolmanagment.utils.ServiceHelpers;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -65,6 +65,12 @@ public class LessonService {
 
     }
 
+    //TODO in case of returning empty collection, exception handling may be implemented
+    public Set<Lesson> getLessonByLessonIdSet(Set<Long> lessons){
+        return lessonRepository.getLessonByLessonIdList(lessons);
+    }
+
+
     private boolean isLessonExistByLessonName(String lessonName) {
         boolean lessonExist = lessonRepository.existsLessonByLessonNameEqualsIgnoreCase(lessonName);
 
@@ -76,10 +82,11 @@ public class LessonService {
         }
     }
 
-    private void isLessonExistById(Long id) {
-        lessonRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format(Messages.NOT_FOUND_LESSON_MESSAGE, id)));
+    Lesson isLessonExistById(Long id){
+        return lessonRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException(String.format(Messages.NOT_FOUND_LESSON_MESSAGE, id)));
     }
+
 
 
 }
