@@ -5,6 +5,7 @@ import com.project.schoolmanagment.payload.response.LessonResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.service.LessonService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,10 +24,31 @@ public class LessonController {
 
         return lessonService.saveLesson(lessonRequest);
     }
+
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     @DeleteMapping("/delete/{id}")
-    public ResponseMessage deleteLesson (@PathVariable Long id){
+    public ResponseMessage deleteLesson(@PathVariable Long id) {
         return lessonService.deleteLessonById(id);
 
     }
+
+    @GetMapping("/getLessonByLessonName")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    public ResponseMessage<LessonResponse> getLessonByLessonName(@RequestParam String lessonName) {
+        return lessonService.getLessonByLessonName(lessonName);
+
+    }
+    @GetMapping("/search")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    public Page<LessonResponse> search (
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size,
+            @RequestParam(value = "sort") String sort,
+            @RequestParam(value = "type") String type){
+        return lessonService.findLessonByPage(page,size,sort,type);
+    }
+
+    }
+
+
 }
