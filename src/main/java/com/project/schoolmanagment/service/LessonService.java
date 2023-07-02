@@ -2,6 +2,7 @@ package com.project.schoolmanagment.service;
 
 import com.project.schoolmanagment.entity.concretes.Lesson;
 import com.project.schoolmanagment.exception.ConflictException;
+import com.project.schoolmanagment.exception.ResourceNotFoundException;
 import com.project.schoolmanagment.payload.mappers.LessonDto;
 import com.project.schoolmanagment.payload.request.LessonRequest;
 import com.project.schoolmanagment.payload.response.LessonResponse;
@@ -22,7 +23,7 @@ public class LessonService {
     private final LessonRepository lessonRepository;
 
     public ResponseMessage<LessonResponse> saveLesson(LessonRequest lessonRequest) {
-        isLessonExist(lessonRequest.getLessonName());
+        isLessonExistByLessonName(lessonRequest.getLessonName());
 
         Lesson savedLesson = lessonRepository.save(lessonDto.mapLessonRequestToLesson(lessonRequest));
 
@@ -33,16 +34,34 @@ public class LessonService {
                 .build();
     }
 
-    private boolean isLessonExist(String lessonName) {
+    public ResponseMessage deleteLessonById(Long id) {
+        isLessonExistById(id);
+
+        lessonRepository.deleteById(id);
+
+        return ResponseMessage.builder()
+                .message("lesson is deleted")
+                .httpStatus(HttpStatus.OK)
+                .build();
+    }
+
+    private boolean isLessonExistByLessonName(String lessonName) {
         boolean lessonExist = lessonRepository.existsLessonByLessonNameEqualsIgnoreCase(lessonName);
 
         if (lessonExist) {
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_LESSON_MESSAGE, lessonName));
+            throw new ResourceNotFoundException(String.format(Messages.ALREADY_REGISTER_LESSON_MESSAGE, lessonName));
 
         } else {
             return false;
         }
     }
 
+    private boolean isLessonExistById(Long id) {
+        Lesson lesson = lessonRepository.findById(id).orElseThrow(() -> {
 
-}
+            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_LESSON_MESSAGE, id));
+
+        });
+
+
+    }
