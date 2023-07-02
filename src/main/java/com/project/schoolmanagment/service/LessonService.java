@@ -1,7 +1,6 @@
 package com.project.schoolmanagment.service;
 
 import com.project.schoolmanagment.entity.concretes.Lesson;
-import com.project.schoolmanagment.exception.ConflictException;
 import com.project.schoolmanagment.exception.ResourceNotFoundException;
 import com.project.schoolmanagment.payload.mappers.LessonDto;
 import com.project.schoolmanagment.payload.request.LessonRequest;
@@ -56,12 +55,10 @@ public class LessonService {
         }
     }
 
-    private boolean isLessonExistById(Long id) {
-        Lesson lesson = lessonRepository.findById(id).orElseThrow(() -> {
-
-            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_LESSON_MESSAGE, id));
-
-        });
+    private void isLessonExistById(Long id) {
+        lessonRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(Messages.NOT_FOUND_LESSON_MESSAGE, id)));
+    }}
 
 
-    }
+
