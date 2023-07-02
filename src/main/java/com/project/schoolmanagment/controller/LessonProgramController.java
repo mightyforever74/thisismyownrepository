@@ -5,6 +5,7 @@ import com.project.schoolmanagment.entity.concretes.LessonProgram;
 import com.project.schoolmanagment.payload.response.LessonProgramResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.service.LessonProgramService;
+import com.project.schoolmanagment.service.LessonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,11 +20,11 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class LessonProgramController {
 
-
+private  final LessonProgramService lessonProgramService;
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     public ResponseMessage<LessonProgramResponse> saveLessonProgram(@RequestBody Lesson){
-
+return  lessonProgramService.saveLessonProgram(lessonProgramRequest)
 
     }
 
