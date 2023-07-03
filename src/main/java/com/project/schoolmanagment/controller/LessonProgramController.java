@@ -20,7 +20,7 @@ public class LessonProgramController {
 
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
-    public ResponseMessage<LessonProgramResponse> saveLessonProgram(@RequestBody @Valid LessonProgramRequest lessonProgramRequest) {
+    public ResponseMessage<LessonProgramResponse>saveLessonProgram(@RequestBody @Valid LessonProgramRequest lessonProgramRequest){
         return lessonProgramService.saveLessonProgram(lessonProgramRequest);
 
     }
@@ -38,11 +38,17 @@ public class LessonProgramController {
 
 
     }
+    @GetMapping("/getAllUnassigned")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER','STUDENT')")
+    public List<LessonProgramResponse>getAllUnassigned(){
+        return lessonProgramService.getAllLessonProgramUnassigned();
+    }
     @GetMapping("/getAllAssigned")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER','STUDENT')")
     public List<LessonProgramResponse>getAllAssigned(){
-        return lessonProgramService.getAllLessonProgramUnassigned();
+        return lessonProgramService.getAllAssigned();
     }
+
 
 
 
