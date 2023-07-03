@@ -43,6 +43,8 @@ public class EducationTermService {
 
     }
 
+
+
     public List<EducationTermResponse> getAllEducationTerms(){
         return educationTermRepository.findAll()
                 .stream()

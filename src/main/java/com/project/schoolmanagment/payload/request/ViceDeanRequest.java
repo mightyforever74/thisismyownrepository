@@ -6,10 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
 @SuperBuilder
 public class ViceDeanRequest extends BaseUserRequest {
-
 }

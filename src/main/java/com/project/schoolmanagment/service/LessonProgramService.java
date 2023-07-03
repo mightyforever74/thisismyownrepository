@@ -7,12 +7,17 @@ import com.project.schoolmanagment.exception.BadRequestException;
 import com.project.schoolmanagment.exception.ResourceNotFoundException;
 import com.project.schoolmanagment.payload.mappers.LessonProgramDto;
 import com.project.schoolmanagment.payload.request.LessonProgramRequest;
+import com.project.schoolmanagment.payload.response.EducationTermResponse;
 import com.project.schoolmanagment.payload.response.LessonProgramResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.repository.LessonProgramRepository;
 import com.project.schoolmanagment.utils.Messages;
+import com.project.schoolmanagment.utils.ServiceHelpers;
 import com.project.schoolmanagment.utils.TimeControl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +36,8 @@ public class LessonProgramService {
     private final EducationTermService educationTermService;
 
     private final LessonProgramDto lessonProgramDto;
+
+    private final ServiceHelpers serviceHelpers;
 
     public ResponseMessage<LessonProgramResponse> saveLessonProgram(LessonProgramRequest lessonProgramRequest) {
 
@@ -62,16 +69,15 @@ public class LessonProgramService {
                 .map(lessonProgramDto::mapLessonProgramtoLessonProgramResponse)
                 .collect(Collectors.toList());
     }
+    public Page<LessonProgramResponse> getAllLessonProgramByPage(int page,int size,String sort, String type){
+        Pageable pageable= serviceHelpers.getPageableWithProperties(page,size,sort,type);
 
-    private void isLessonProgramExistById(Long id) {
-        lessonProgramRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format(Messages.NOT_FOUND_LESSON_PROGRAM_MESSAGE, id)));
+    return lessonProgramRepository.findAll(pageable).map(lessonProgramDto::mapLessonProgramtoLessonProgramResponse);
     }
 
     public LessonProgramResponse getLessonProgramById(Long id) {
-        LessonProgram lessonProgram = lessonProgramRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format(Messages.NOT_FOUND_LESSON_PROGRAM_MESSAGE, id)));
-        return lessonProgramDto.mapLessonProgramtoLessonProgramResponse(lessonProgram);
+        isLessonProgramExistById(id);
+        return lessonProgramDto.mapLessonProgramtoLessonProgramResponse(lessonProgramRepository.findById(id).get() );
     }
 
     public List<LessonProgramResponse> getAllLessonProgramUnassigned() {
@@ -89,5 +95,21 @@ public class LessonProgramService {
                 .collect(Collectors.toList());
 
     }
+
+    public ResponseMessage deleteLessonProgramById(Long id){
+        isLessonProgramExistById(id);
+        lessonProgramRepository.deleteById(id);
+
+        return  ResponseMessage.builder()
+                .message("Lesson Program is deleted")
+                .httpStatus(HttpStatus.OK)
+                .build();
+}
+    private void isLessonProgramExistById(Long id) {
+        lessonProgramRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(Messages.NOT_FOUND_LESSON_PROGRAM_MESSAGE, id)));
+    }
+
+    
 }
 
