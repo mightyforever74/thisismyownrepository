@@ -1,6 +1,5 @@
 package com.project.schoolmanagment.entity.concretes;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 public class Lesson {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long lessonId;
@@ -26,7 +26,7 @@ public class Lesson {
 
     private Boolean isCompulsory;
 
-    @JsonIgnore
+
     @ManyToMany(mappedBy = "lesson")
     private Set<LessonProgram> lessonPrograms;
 

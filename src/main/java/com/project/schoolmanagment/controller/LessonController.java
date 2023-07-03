@@ -23,7 +23,6 @@ public class LessonController {
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     @PostMapping("/save")
     public ResponseMessage<LessonResponse> saveLesson(@RequestBody @Valid LessonRequest lessonRequest) {
-
         return lessonService.saveLesson(lessonRequest);
 
     }
@@ -53,7 +52,7 @@ public class LessonController {
     }
     @GetMapping("/getAllLessonByLessonId")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
-    public Set<Lesson> getAllLessonsByLessonId(@RequestParam(name = "lessonId") Set<Long> idSet){
+    public Set<Lesson> getAllLessonsByLessonId(@RequestParam(name = "lessonId") Set<Long> idSet) {
         return lessonService.getLessonByLessonIdSet(idSet);
     }
 

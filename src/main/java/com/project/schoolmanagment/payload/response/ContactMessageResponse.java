@@ -16,8 +16,11 @@ import java.time.LocalDate;
 public class ContactMessageResponse implements Serializable {
     // db den gelen veri validasyon yapilmaz
     private String name;
+
     private String email;
+
     private String subject;
+
     private String message;
 
     public LocalDate date;

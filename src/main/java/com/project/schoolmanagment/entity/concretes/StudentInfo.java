@@ -29,9 +29,9 @@ public class StudentInfo {
     private Double examAverage;
 
     private String infoNote;
+
     @ManyToOne//bircok ogr bir ogr olsun
     @JsonIgnoreProperties("teacher")
-
     private Teacher teacher;
 
     @ManyToOne
@@ -39,6 +39,7 @@ public class StudentInfo {
 
     @Enumerated(EnumType.STRING)
     private Note letterGrade;
+
     // lesson   EducationTerm
 
     @ManyToOne

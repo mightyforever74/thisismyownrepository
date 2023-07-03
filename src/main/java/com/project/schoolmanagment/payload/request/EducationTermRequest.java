@@ -1,4 +1,4 @@
-package com.project.schoolmanagment.payload.request.abstracts;
+package com.project.schoolmanagment.payload.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.schoolmanagment.entity.enums.Term;

@@ -1,5 +1,6 @@
 package com.project.schoolmanagment.payload.response;
 
+import com.project.schoolmanagment.payload.response.abstracts.BaseUserResponse;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,5 +10,5 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @NoArgsConstructor
 @SuperBuilder
-public class DeanResponse extends BaseUserResponse{
+public class DeanResponse extends BaseUserResponse {
 }

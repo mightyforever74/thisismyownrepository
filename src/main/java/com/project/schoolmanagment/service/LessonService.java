@@ -51,13 +51,13 @@ public class LessonService {
                 .build();
     }
 
-    public ResponseMessage<LessonResponse> getLessonByLessonName(String lessonName) {
-
+    public ResponseMessage<LessonResponse>getLessonByLessonName(String lessonName){
         return ResponseMessage.<LessonResponse>builder()
                 .message("Lesson is successfully found")
                 .object(lessonDto.mapLessonToLessonResponse(lessonRepository.getLessonByLessonName(lessonName).get()))
                 .build();
     }
+
 
     public Page<LessonResponse> findLessonByPage(int page, int size, String sort, String type) {
         Pageable pageable = serviceHelpers.getPageableWithProperties(page, size, sort, type);

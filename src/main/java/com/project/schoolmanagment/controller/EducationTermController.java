@@ -1,7 +1,6 @@
 package com.project.schoolmanagment.controller;
 
-import com.project.schoolmanagment.entity.concretes.EducationTerm;
-import com.project.schoolmanagment.payload.request.abstracts.EducationTermRequest;
+import com.project.schoolmanagment.payload.request.EducationTermRequest;
 import com.project.schoolmanagment.payload.response.EducationTermResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.service.EducationTermService;

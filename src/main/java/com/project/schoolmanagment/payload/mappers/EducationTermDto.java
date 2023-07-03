@@ -3,7 +3,7 @@ package com.project.schoolmanagment.payload.mappers;
 
 import com.project.schoolmanagment.entity.concretes.EducationTerm;
 
-import com.project.schoolmanagment.payload.request.abstracts.EducationTermRequest;
+import com.project.schoolmanagment.payload.request.EducationTermRequest;
 import com.project.schoolmanagment.payload.response.EducationTermResponse;
 import lombok.Data;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,7 @@ public class EducationTermDto {
     }
     public EducationTerm mapEducationTermRequestToUpdatedEducationTerm(Long id, EducationTermRequest educationTermRequest){
         return mapEducationTermRequestToEducationTerm(educationTermRequest)
-                .builder()
+                .toBuilder()
                 .id(id)
                 .build();
 

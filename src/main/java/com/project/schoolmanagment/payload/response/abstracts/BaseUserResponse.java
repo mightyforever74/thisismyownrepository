@@ -1,4 +1,4 @@
-package com.project.schoolmanagment.payload.response;
+package com.project.schoolmanagment.payload.response.abstracts;
 
 import com.project.schoolmanagment.entity.enums.Gender;
 import lombok.AllArgsConstructor;

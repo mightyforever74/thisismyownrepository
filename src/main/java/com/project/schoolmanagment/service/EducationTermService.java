@@ -3,7 +3,7 @@ package com.project.schoolmanagment.service;
 import com.project.schoolmanagment.entity.concretes.EducationTerm;
 import com.project.schoolmanagment.exception.ResourceNotFoundException;
 import com.project.schoolmanagment.payload.mappers.EducationTermDto;
-import com.project.schoolmanagment.payload.request.abstracts.EducationTermRequest;
+import com.project.schoolmanagment.payload.request.EducationTermRequest;
 import com.project.schoolmanagment.payload.response.EducationTermResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.repository.EducationTermRepository;
@@ -29,7 +29,7 @@ public class EducationTermService {
     private final ServiceHelpers serviceHelpers;
 
 
-    public ResponseMessage<EducationTermResponse> saveEducationTerm(EducationTermRequest educationTermRequest) {
+    public ResponseMessage<EducationTermResponse> saveEducationTerm(EducationTermRequest educationTermRequest){
 
         validateEducationTermDates(educationTermRequest);
 
@@ -43,14 +43,15 @@ public class EducationTermService {
 
     }
 
-    public List<EducationTermResponse> getAllEducationTerms() {
+    public List<EducationTermResponse> getAllEducationTerms(){
         return educationTermRepository.findAll()
                 .stream()
                 .map(educationTermDto::mapEducationTermToEducationTermResponse)
                 .collect(Collectors.toList());
     }
 
-    public EducationTermResponse getEducationTermResponseById(Long id) {
+
+    public EducationTermResponse getEducationTermResponseById(Long id){
 
 //		return educationTermDto.mapEducationTermToEducationTermResponse
 //				(educationTermRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Could not find Education term with id " + id)));
@@ -61,13 +62,12 @@ public class EducationTermService {
 
     }
 
-    public EducationTerm getEducationTermById(Long id) {
+    public EducationTerm getEducationTermById(Long id){
         return isEducationTermExist(id);
-
-
     }
 
-    public ResponseMessage<?> deleteEducationTermById(Long id) {
+
+    public ResponseMessage<?>deleteEducationTermById(Long id){
 
         isEducationTermExist(id);
 
@@ -80,19 +80,19 @@ public class EducationTermService {
     }
 
 
-    public Page<EducationTermResponse> getAllEducationTermsByPage(int page, int size, String sort, String type) {
+    public Page<EducationTermResponse> getAllEducationTermsByPage (int page,int size,String sort,String type){
         Pageable pageable = serviceHelpers.getPageableWithProperties(page, size, sort, type);
 
         return educationTermRepository.findAll(pageable).map(educationTermDto::mapEducationTermToEducationTermResponse);
     }
 
-    public ResponseMessage<EducationTermResponse> updateEducationTerm(Long id, EducationTermRequest educationTermRequest) {
+    public ResponseMessage<EducationTermResponse>updateEducationTerm(Long id,EducationTermRequest educationTermRequest){
 
         isEducationTermExist(id);
 
         validateEducationTermDatesForUpdate(educationTermRequest);
 
-        EducationTerm educationTermUpdated = educationTermRepository.save(educationTermDto.mapEducationTermRequestToUpdatedEducationTerm(id, educationTermRequest));
+        EducationTerm educationTermUpdated = educationTermRepository.save(educationTermDto.mapEducationTermRequestToUpdatedEducationTerm(id,educationTermRequest));
 
         return ResponseMessage.<EducationTermResponse>builder()
                 .message("Education Term Updated")
@@ -102,17 +102,18 @@ public class EducationTermService {
 
     }
 
-    private EducationTerm isEducationTermExist(Long id) {
+    private EducationTerm isEducationTermExist(Long id){
         EducationTerm term = educationTermRepository.findByIdEquals(id);
-        if (term == null) {
-            throw new ResourceNotFoundException(String.format(Messages.EDUCATION_TERM_NOT_FOUND_MESSAGE, id));
+        if(term==null){
+            throw new ResourceNotFoundException(String.format(Messages.EDUCATION_TERM_NOT_FOUND_MESSAGE,id));
         } else {
             return term;
         }
     }
 
 
-    private void validateEducationTermDates(EducationTermRequest educationTermRequest) {
+
+    private void validateEducationTermDates(EducationTermRequest educationTermRequest){
 
         //TODO another requirement can be needed for validating ->  registration > end
         // check the dates also for TODAY
@@ -122,35 +123,41 @@ public class EducationTermService {
         // we need one more validatetion in addition to validation above
 
         // if any education term exist in these year with this term
-        if (educationTermRepository.existsByTermAndYear(educationTermRequest.getTerm(), educationTermRequest.getStartDate().getYear())) {
+        if(educationTermRepository.existsByTermAndYear(educationTermRequest.getTerm(),educationTermRequest.getStartDate().getYear())){
             throw new ResourceNotFoundException(Messages.EDUCATION_TERM_IS_ALREADY_EXIST_BY_TERM_AND_YEAR_MESSAGE);
         }
 
 
     }
 
-    private void validateEducationTermDatesForUpdate(EducationTermRequest educationTermRequest) {
+    private void validateEducationTermDatesForUpdate(EducationTermRequest educationTermRequest){
 
         //TODO another requirement can be needed for validating ->  registration > end
         // check the dates also for TODAY
 
         // registration > start
-        if (educationTermRequest.getLastRegistrationDate().isAfter(educationTermRequest.getStartDate())) {
+        if(educationTermRequest.getLastRegistrationDate().isAfter(educationTermRequest.getStartDate())){
             throw new ResourceNotFoundException(Messages.EDUCATION_START_DATE_IS_EARLIER_THAN_LAST_REGISTRATION_DATE);
         }
 
         // end > start
-        if (educationTermRequest.getEndDate().isBefore(educationTermRequest.getStartDate())) {
+        if(educationTermRequest.getEndDate().isBefore(educationTermRequest.getStartDate())){
             throw new ResourceNotFoundException(Messages.EDUCATION_END_DATE_IS_EARLIER_THAN_START_DATE);
 
         }
         // if any education term exist in the year with this term
-        if (educationTermRepository.existsByTermAndYear(educationTermRequest.getTerm(), educationTermRequest.getStartDate().getYear())) {
-            throw new ResourceNotFoundException(Messages.EDUCATION_TERM_IS_ALREADY_EXIST_BY_TERM_AND_YEAR_MESSAGE);
+        if (educationTermRepository.existsByTermAndYear(educationTermRequest.getTerm(), educationTermRequest.getStartDate().getYear())){
+            throw  new ResourceNotFoundException(Messages.EDUCATION_TERM_IS_ALREADY_EXIST_BY_TERM_AND_YEAR_MESSAGE);
         }
 
 
     }
+
+
+
+
+
+
 
 
 }
