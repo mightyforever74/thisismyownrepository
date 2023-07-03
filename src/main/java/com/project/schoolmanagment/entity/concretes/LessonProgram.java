@@ -17,7 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class LessonProgram implements Serializable {
+public class LessonProgram {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,11 +44,11 @@ public class LessonProgram implements Serializable {
     @ManyToOne(cascade = CascadeType.PERSIST)
     private EducationTerm educationTerm;
 
-   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ManyToMany(mappedBy = "lessonsProgramList" ,fetch = FetchType.EAGER)
     private Set<Teacher> teachers;
 
-   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ManyToMany(mappedBy = "lessonsProgramList" ,fetch = FetchType.EAGER)
     private Set<Student>students;
 

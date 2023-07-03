@@ -58,5 +58,4 @@ public class Student extends User {
     )
     private List<Meet> meetList;
 
-
 }

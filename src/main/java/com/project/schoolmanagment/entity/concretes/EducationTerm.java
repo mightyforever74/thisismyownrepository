@@ -19,7 +19,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class EducationTerm {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -46,6 +45,8 @@ public class EducationTerm {
     @OneToMany(mappedBy = "educationTerm" ,cascade = CascadeType.ALL)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<LessonProgram> lessonProgram;
+
+
 
 
 
