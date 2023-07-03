@@ -2,6 +2,7 @@ package com.project.schoolmanagment.controller;
 
 import com.project.schoolmanagment.entity.concretes.Lesson;
 import com.project.schoolmanagment.entity.concretes.LessonProgram;
+import com.project.schoolmanagment.payload.request.abstracts.LessonProgramRequest;
 import com.project.schoolmanagment.payload.response.LessonProgramResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.service.LessonProgramService;
@@ -23,8 +24,8 @@ public class LessonProgramController {
 private  final LessonProgramService lessonProgramService;
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
-    public ResponseMessage<LessonProgramResponse> saveLessonProgram(@RequestBody Lesson){
-return  lessonProgramService.saveLessonProgram(lessonProgramRequest)
+    public ResponseMessage<LessonProgramResponse>saveLessonProgram(@RequestBody @Valid LessonProgramRequest lessonProgramRequest){
+        return lessonProgramService.saveLessonProgram(lessonProgramRequest);
 
     }
 

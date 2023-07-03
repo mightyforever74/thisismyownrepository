@@ -22,8 +22,8 @@ public class LessonProgramResponse {
 
     private Long lessonProgramId;
     private Day day;
-    private LocalDate startTime;
-    private LocalDate stopTime;
+    private LocalTime startTime;
+    private LocalTime stopTime;
     private Set<Lesson> lessonName;
     private EducationTerm educationTerm;
     private Set<TeacherResponse> teachers;
