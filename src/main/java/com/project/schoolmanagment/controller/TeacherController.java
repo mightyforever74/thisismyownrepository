@@ -6,12 +6,10 @@ import com.project.schoolmanagment.payload.response.TeacherResponse;
 import com.project.schoolmanagment.service.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("teachers")
@@ -24,7 +22,20 @@ public class TeacherController {
     public ResponseMessage<TeacherResponse> saveTeacher(@RequestBody @Valid TeacherRequest teacherRequest){
         return teacherService.saveTeacher(teacherRequest);
     }
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @PostMapping("/getAll")
+    public List<TeacherResponse>getAllTeacher(){
+        return teacherService.getAllTeacher();
 
+
+    }
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @PostMapping("/getTeacherByName")
+    public List<TeacherResponse>getTeacherByName(@RequestParam (name="name")String teacherName){
+        return teacherService.getTeacherByName(teacherName);
+
+
+    }
 
 
 }

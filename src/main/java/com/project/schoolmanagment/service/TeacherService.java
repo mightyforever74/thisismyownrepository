@@ -14,7 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -53,7 +55,7 @@ public class TeacherService {
         teacher.setPassword(passwordEncoder.encode(teacher.getPassword()));
 
         Teacher savedTeacher = teacherRepository.save(teacher);
-        if (teacherRequest.isAdvisoryTeacher(){
+        if (teacherRequest.isAdvisoryTeacher()) {
             advisoryTeacherService.saveAdvisoryTeacher(teacher);
         }
         return ResponseMessage.<TeacherResponse>builder()
@@ -61,5 +63,21 @@ public class TeacherService {
                 .httpStatus(HttpStatus.CREATED)
                 .object(teacherDto.mapTeacherToTeacherResponse(savedTeacher))
                 .build();
+    }
+
+    public List<TeacherResponse> getAllTeacher() {
+
+        return teacherRepository.findAll()
+                .stream()
+                .map(teacherDto::mapTeacherToTeacherResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<TeacherResponse> getTeacherByName(String teacherName) {
+        return teacherRepository.getTeachersByNameContaining(teacherName)
+                .stream()
+                .map(teacherDto::mapTeacherToTeacherResponse)
+                .collect(Collectors.toList());
+
     }
 }

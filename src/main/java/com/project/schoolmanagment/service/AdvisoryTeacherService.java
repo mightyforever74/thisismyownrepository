@@ -18,14 +18,15 @@ public class AdvisoryTeacherService {
 
     private final AdvisoryTeacherDto advisoryTeacherDto;
 
-    public  void saveAdvisoryTeacher(Teacher teacher){
-        AdvisoryTeacher advisoryTeacher= AdvisoryTeacherDto.mapTeacherToAdvisoryTeacher(teacher);
-        advisoryTeacher.getUserRole(userRoleService.getAllUserRole(RoleType.ADVISORY_TEACHER));
+    public void saveAdvisoryTeacher(Teacher teacher){
+
+        AdvisoryTeacher advisoryTeacher = advisoryTeacherDto.mapTeacherToAdvisoryTeacher(teacher);
+        advisoryTeacher.setUserRole(userRoleService.getUserRole(RoleType.ADVISORY_TEACHER));
 
         advisoryTeacherRepository.save(advisoryTeacher);
 
-
     }
+
 
 
 
