@@ -94,9 +94,10 @@ public class TeacherService {
     }
 
     private void isTeacherExist(Long id) {
-        teacherRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE,id)));
+        teacherRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, id)));
     }
-public  ResponseMessage<TeacherResponse>getTeacherById(Long id){
+
+    public ResponseMessage<TeacherResponse> getTeacherById(Long id) {
         isTeacherExist(id);
 
         return ResponseMessage.<TeacherResponse>builder()
@@ -104,5 +105,6 @@ public  ResponseMessage<TeacherResponse>getTeacherById(Long id){
                 .message("Teacher successfully found")
                 .httpStatus(HttpStatus.OK)
                 .build();
-}
+    }
+
 }

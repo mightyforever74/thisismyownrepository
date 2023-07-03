@@ -41,7 +41,11 @@ public class TeacherController {
     public ResponseMessage deleteTeacherById(@PathVariable Long id){
         return teacherService.deleteTeacherById(id);
     }
-
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @GetMapping("/getSavedTeacherById/{id}")
+    public ResponseMessage<TeacherResponse> findTeacherById(@PathVariable Long id){
+        return teacherService.getTeacherById(id);
+    }
 
 
 }
