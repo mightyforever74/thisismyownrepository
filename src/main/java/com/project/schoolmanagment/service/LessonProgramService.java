@@ -62,6 +62,13 @@ public class LessonProgramService {
                 .build();
     }
 
+    //TODO add  a val  for empty cpllection and send meaningfull responce
+    public Set<LessonProgramResponse> getLessonProgramByTeacher(String username){
+        return lessonProgramRepository.getLessonProgramByTeachersUsername(username)
+                .stream().map(lessonProgramDto::mapLessonProgramtoLessonProgramResponse)
+                .collect(Collectors.toSet());
+    }
+
     public List<LessonProgramResponse> getAllLessonProgramList() {
         return lessonProgramRepository
                 .findAll()
@@ -69,15 +76,17 @@ public class LessonProgramService {
                 .map(lessonProgramDto::mapLessonProgramtoLessonProgramResponse)
                 .collect(Collectors.toList());
     }
-    public Page<LessonProgramResponse> getAllLessonProgramByPage(int page,int size,String sort, String type){
-        Pageable pageable= serviceHelpers.getPageableWithProperties(page,size,sort,type);
 
-    return lessonProgramRepository.findAll(pageable).map(lessonProgramDto::mapLessonProgramtoLessonProgramResponse);
+    public Page<LessonProgramResponse> getAllLessonProgramByPage(int page, int size, String sort, String type) {
+
+        Pageable pageable = serviceHelpers.getPageableWithProperties(page, size, sort, type);
+
+        return lessonProgramRepository.findAll(pageable).map(lessonProgramDto::mapLessonProgramtoLessonProgramResponse);
     }
 
     public LessonProgramResponse getLessonProgramById(Long id) {
         isLessonProgramExistById(id);
-        return lessonProgramDto.mapLessonProgramtoLessonProgramResponse(lessonProgramRepository.findById(id).get() );
+        return lessonProgramDto.mapLessonProgramtoLessonProgramResponse(lessonProgramRepository.findById(id).get());
     }
 
     public List<LessonProgramResponse> getAllLessonProgramUnassigned() {
@@ -96,20 +105,21 @@ public class LessonProgramService {
 
     }
 
-    public ResponseMessage deleteLessonProgramById(Long id){
+    public ResponseMessage deleteLessonProgramById(Long id) {
         isLessonProgramExistById(id);
         lessonProgramRepository.deleteById(id);
 
-        return  ResponseMessage.builder()
+        return ResponseMessage.builder()
                 .message("Lesson Program is deleted")
                 .httpStatus(HttpStatus.OK)
                 .build();
-}
+    }
+
     private void isLessonProgramExistById(Long id) {
         lessonProgramRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format(Messages.NOT_FOUND_LESSON_PROGRAM_MESSAGE, id)));
     }
 
-    
+
 }
 
