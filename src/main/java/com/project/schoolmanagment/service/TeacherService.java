@@ -3,11 +3,13 @@ package com.project.schoolmanagment.service;
 import com.project.schoolmanagment.entity.concretes.LessonProgram;
 import com.project.schoolmanagment.entity.concretes.Teacher;
 import com.project.schoolmanagment.entity.enums.RoleType;
+import com.project.schoolmanagment.exception.ResourceNotFoundException;
 import com.project.schoolmanagment.payload.mappers.TeacherDto;
 import com.project.schoolmanagment.payload.request.TeacherRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.TeacherResponse;
 import com.project.schoolmanagment.repository.TeacherRepository;
+import com.project.schoolmanagment.utils.Messages;
 import com.project.schoolmanagment.utils.ServiceHelpers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -80,4 +82,27 @@ public class TeacherService {
                 .collect(Collectors.toList());
 
     }
+
+    public ResponseMessage deleteTeacherById(Long id) {
+        isTeacherExist(id);
+        teacherRepository.deleteById(id);
+
+        return ResponseMessage.builder()
+                .message("Teacher Deleted Successfully")
+                .httpStatus(HttpStatus.OK)
+                .build();
+    }
+
+    private void isTeacherExist(Long id) {
+        teacherRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE,id)));
+    }
+public  ResponseMessage<TeacherResponse>getTeacherById(Long id){
+        isTeacherExist(id);
+
+        return ResponseMessage.<TeacherResponse>builder()
+                .object(teacherDto.mapTeacherToTeacherResponse(teacherRepository.findById(id).get()))
+                .message("Teacher successfully found")
+                .httpStatus(HttpStatus.OK)
+                .build();
+}
 }

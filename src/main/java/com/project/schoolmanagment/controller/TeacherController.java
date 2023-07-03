@@ -36,6 +36,12 @@ public class TeacherController {
 
 
     }
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @DeleteMapping("/delete/{id}")
+    public ResponseMessage deleteTeacherById(@PathVariable Long id){
+        return teacherService.deleteTeacherById(id);
+    }
+
 
 
 }

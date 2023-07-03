@@ -23,3 +23,4 @@ public interface LessonProgramRepository extends JpaRepository<LessonProgram, Lo
     @Query("SELECT l FROM LessonProgram l WHERE l.id IN:lessonsIdList")
     Set<LessonProgram>getLessonProgramByLessonProgramIdList(Set<Long>lessonsIdList);
 }
+
