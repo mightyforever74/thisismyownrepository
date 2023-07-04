@@ -5,6 +5,7 @@ import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.TeacherResponse;
 import com.project.schoolmanagment.service.TeacherService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,11 +42,19 @@ public class TeacherController {
     public ResponseMessage deleteTeacherById(@PathVariable Long id){
         return teacherService.deleteTeacherById(id);
     }
+
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     @GetMapping("/getSavedTeacherById/{id}")
     public ResponseMessage<TeacherResponse> findTeacherById(@PathVariable Long id){
         return teacherService.getTeacherById(id);
     }
-
-
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @GetMapping("/search")
+    public Page<TeacherResponse> search(@RequestParam(value = "page")int page,
+                                        @RequestParam(value = "size") int size,
+                                        @RequestParam(value = "sort") String sort,
+                                        @RequestParam(value = "type") String type)
+    {
+        return teacherService.findTeacherByPage(page,size,sort,type);
+    }
 }

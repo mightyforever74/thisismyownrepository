@@ -20,7 +20,7 @@ public interface LessonProgramRepository extends JpaRepository<LessonProgram, Lo
 
 
     //SQL -> SELECT l FROM lessonProgram l WHERE lesson_program.id IN: (2,3);
-    @Query("SELECT l FROM LessonProgram l WHERE l.id IN:lessonsIdList")
-    Set<LessonProgram>getLessonProgramByLessonProgramIdList(Set<Long>lessonsIdList);
+    @Query("SELECT l FROM LessonProgram  l WHERE l.id IN :myProperty")
+   	Set<LessonProgram>getLessonProgramByLessonProgramIdList(Set<Long> myProperty);
 }
 
