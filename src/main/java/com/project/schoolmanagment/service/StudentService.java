@@ -9,6 +9,7 @@ import com.project.schoolmanagment.payload.request.StudentRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.StudentResponse;
 import com.project.schoolmanagment.repository.StudentRepository;
+import com.project.schoolmanagment.utils.CheckParameterUpdateMethod;
 import com.project.schoolmanagment.utils.CheckSameLessonProgram;
 import com.project.schoolmanagment.utils.Messages;
 import com.project.schoolmanagment.utils.ServiceHelpers;
@@ -16,6 +17,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -67,7 +71,7 @@ public class StudentService {
     }
 
         public ResponseMessage changeStatus(Long studentId, boolean status){
-        Student student= isStudentExist(studentId);
+        Student student= isStudentsExist(studentId);
         student.setActive(status);
         studentRepository.save(student);
         return ResponseMessage.builder()
@@ -76,12 +80,59 @@ public class StudentService {
                 .build();
 
         }
-    private Student isStudentExist(Long studentId){
+    private Student isStudentsExist(Long studentId){
         return studentRepository
                 .findById(studentId)
                 .orElseThrow(()->
                 new ResourceNotFoundException(String.format(Messages.STUDENT_INFO_NOT_FOUND,studentId)));
-
-
     }
+
+    public List<StudentResponse> getAllStudents(){
+        return studentRepository.findAll()
+                .stream()
+                .map(studentDto::mapStudentToStudentResponse)
+                .collect(Collectors.toList());
+    }
+
+    public ResponseMessage<StudentResponse>updateStudent(Long studentId, StudentRequest studentRequest) {
+        Student student = isStudentsExist(studentId);
+
+        AdvisoryTeacher advisoryTeacher = advisoryTeacherService.getAdvisoryTeacherById(studentRequest.getAdvisorTeacherId());
+
+        if (!CheckParameterUpdateMethod.checkUniquePropertiesForStudent(student, studentRequest)) {
+            serviceHelpers.checkDuplicate(studentRequest.getUsername(),
+                    studentRequest.getSsn(),
+                    studentRequest.getPhoneNumber(),
+                    studentRequest.getEmail());
+        }
+        Student studentForUpdate = studentDto.mapStudentRequestToUpdatedStudent(studentRequest,studentId);
+        studentForUpdate.setPassword(passwordEncoder.encode(studentRequest.getPassword()));
+        studentForUpdate.setAdvisoryTeacher(advisoryTeacher);
+        studentForUpdate.setStudentNumber(student.getStudentNumber());
+        studentForUpdate.setUserRole(userRoleService.getUserRole(RoleType.STUDENT));
+        studentForUpdate.setActive(true);
+        studentRepository.save(studentForUpdate);
+        return ResponseMessage.<StudentResponse>builder()
+                .object(studentDto.mapStudentToStudentResponse(studentRepository.save(studentForUpdate)))
+                .message("Student updated successfully")
+                .httpStatus(HttpStatus.OK)
+                .build();
+    }
+
+    public ResponseMessage deleteStudentById(Long id){
+        isStudentsExist(id);
+        studentRepository.deleteById(id);
+        return ResponseMessage.builder()
+                .message("Student Deleted Successfully")
+                .httpStatus(HttpStatus.OK)
+                .build();
+    }
+
+    public List<StudentResponse> findStudentsByName(String studentName){
+        return studentRepository.getStudentByNameContaining(studentName)
+                .stream()
+                .map(studentDto::mapStudentToStudentResponse)
+                .collect(Collectors.toList());
+    }
+
 }
