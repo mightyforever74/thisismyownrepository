@@ -49,11 +49,12 @@ public static final String EDUCATION_START_DATE_IS_EARLIER_THAN_LAST_REGISTRATIO
     public static final String EDUCATION_TERM_NOT_FOUND_MESSAGE =
             "Error: Education Term with id %s not found" ;
 
-    public static final String NOT_FOUND_LESSON_PROGRAM_MESSAGE =
-            "Error: Lesson program with this field %s not found";
-    public static final String NOT_FOUND_LESSON_PROGRAM_MESSAGE_WITHOUT_ID_INFO =
-            "Error: Lesson program with this field %s not found";
     //lesson
+
+    //lesson program
+    public static final String NOT_FOUND_LESSON_PROGRAM_MESSAGE = "Error: Lesson program with this field %s not found";
+    public static final String NOT_FOUND_LESSON_PROGRAM_MESSAGE_WITHOUT_ID_INFO = "Error: Lesson program with this field not found";
+    public static final String LESSON_PROGRAM_EXIST_MESSAGE = "Error: Course schedule can not be selected for the same hour and date" ;
 
 
 }

@@ -5,6 +5,7 @@ import com.project.schoolmanagment.entity.concretes.Teacher;
 import com.project.schoolmanagment.entity.enums.RoleType;
 import com.project.schoolmanagment.exception.ResourceNotFoundException;
 import com.project.schoolmanagment.payload.mappers.TeacherDto;
+import com.project.schoolmanagment.payload.request.ChooseLessonTeacherRequest;
 import com.project.schoolmanagment.payload.request.TeacherRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.TeacherResponse;
@@ -127,20 +128,34 @@ public class TeacherService {
                     , teacherRequest.getPhoneNumber()
                     , teacherRequest.getEmail());
         }
-        Teacher updatedTeacher= teacherDto.mapTeacherRequestToUpdatedTeacher(teacherRequest,userId);
+        Teacher updatedTeacher = teacherDto.mapTeacherRequestToUpdatedTeacher(teacherRequest, userId);
         //props. that does not exist in mappers
         updatedTeacher.setPassword(passwordEncoder.encode(teacherRequest.getPassword()));
         updatedTeacher.setLessonsProgramList(lessonPrograms);
         updatedTeacher.setUserRole(userRoleService.getUserRole(RoleType.TEACHER));
 
         Teacher savedTeacher = teacherRepository.save(updatedTeacher);
-        advisoryTeacherService.updateAdvisoryTeacher(teacherRequest.isAdvisoryTeacher(),savedTeacher);
+        advisoryTeacherService.updateAdvisoryTeacher(teacherRequest.isAdvisoryTeacher(), savedTeacher);
 
-            return ResponseMessage.<TeacherResponse>builder()
-                    .object(teacherDto.mapTeacherToTeacherResponse(savedTeacher))
-                    .message("Teacher successfully updated")
-                    .httpStatus(HttpStatus.OK)
-                    .build();
-    }}
+        return ResponseMessage.<TeacherResponse>builder()
+                .object(teacherDto.mapTeacherToTeacherResponse(savedTeacher))
+                .message("Teacher successfully updated")
+                .httpStatus(HttpStatus.OK)
+                .build();
+    }
+
+    public ResponseMessage<TeacherResponse> chooseLesson(ChooseLessonTeacherRequest chooseLessonTeacherRequest) {
+        Teacher teacher = isTeacherExist(chooseLessonTeacherRequest.getTeacherId());
+
+        Set<LessonProgram> lessonPrograms = lessonProgramService.getLessonProgramById(chooseLessonTeacherRequest.getLessonProgramId());
+
+        Set<LessonProgram>teacherLessonProgram=teacher.getLessonsProgramList();
+
+    }
+
+
+}
+
+
 
 

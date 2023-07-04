@@ -1,5 +1,6 @@
 package com.project.schoolmanagment.controller;
 
+import com.project.schoolmanagment.payload.request.ChooseLessonTeacherRequest;
 import com.project.schoolmanagment.payload.request.TeacherRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.TeacherResponse;
@@ -66,4 +67,10 @@ public class TeacherController {
         return teacherService.updateTeacher(teacherRequest,userId);
 
     }
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @PutMapping("/chooseLesson")
+    public ResponseMessage<TeacherResponse>chooseLesson(@RequestBody @Valid ChooseLessonTeacherRequest chooseLessonTeacherRequest){
+        return teacherService.chooseLesson(chooseLessonTeacherRequest);
+    }
+
 }
