@@ -1,10 +1,12 @@
 package com.project.schoolmanagment.controller;
 
+import com.project.schoolmanagment.entity.concretes.Student;
 import com.project.schoolmanagment.payload.request.StudentRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.StudentResponse;
 import com.project.schoolmanagment.service.StudentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,6 +53,24 @@ public class StudentController {
     public List<StudentResponse>getStudentsByName(@RequestParam(name = "name") String studentName){
         return studentService.findStudentsByName(studentName);
     }
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
+    @GetMapping("/search")
+    public Page<StudentResponse> search(
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size,
+            @RequestParam(value = "sort") String sort,
+            @RequestParam(value = "type") String type
+    ){
+        return studentService.search(page,size,sort,type);
+    }
+
+    //TODO instead of returning entity type, DTO type should be returned
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @GetMapping ("/getStudentById")
+    public Student getStudentById(@RequestParam(name = "id") Long id){
+        return studentService.getStudentById(id);
+    }
+
 
 
 }
