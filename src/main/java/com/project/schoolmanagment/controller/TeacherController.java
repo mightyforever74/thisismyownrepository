@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-
 @RestController
 @RequestMapping("teachers")
 @RequiredArgsConstructor
 public class TeacherController {
+
     private final TeacherService teacherService;
 
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
@@ -23,24 +23,22 @@ public class TeacherController {
     public ResponseMessage<TeacherResponse> saveTeacher(@RequestBody @Valid TeacherRequest teacherRequest){
         return teacherService.saveTeacher(teacherRequest);
     }
+
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
-    @PostMapping("/getAll")
-    public List<TeacherResponse>getAllTeacher(){
+    @GetMapping("/getAll")
+    public List<TeacherResponse> getAllTeacher(){
         return teacherService.getAllTeacher();
-
-
     }
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
-    @PostMapping("/getTeacherByName")
-    public List<TeacherResponse>getTeacherByName(@RequestParam (name="name")String teacherName){
-        return teacherService.getTeacherByName(teacherName);
 
-
-    }
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     @DeleteMapping("/delete/{id}")
     public ResponseMessage deleteTeacherById(@PathVariable Long id){
         return teacherService.deleteTeacherById(id);
+    }
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @GetMapping("/getTeacherByName")
+    public List<TeacherResponse> getTeacherByName(@RequestParam (name = "name") String teacherName){
+        return teacherService.getTeacherByName(teacherName);
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
@@ -48,13 +46,24 @@ public class TeacherController {
     public ResponseMessage<TeacherResponse> findTeacherById(@PathVariable Long id){
         return teacherService.getTeacherById(id);
     }
+
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     @GetMapping("/search")
-    public Page<TeacherResponse> search(@RequestParam(value = "page")int page,
-                                        @RequestParam(value = "size") int size,
-                                        @RequestParam(value = "sort") String sort,
-                                        @RequestParam(value = "type") String type)
-    {
+    public Page<TeacherResponse> search(
+            @RequestParam(value = "page")int page,
+            @RequestParam(value = "size") int size,
+            @RequestParam(value = "sort") String sort,
+            @RequestParam(value = "type") String type){
         return teacherService.findTeacherByPage(page,size,sort,type);
+    }
+
+
+
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @PutMapping("/update/{userId}")
+    public ResponseMessage<TeacherResponse>updateTeacher(@RequestBody @Valid TeacherRequest teacherRequest,
+                                                         @PathVariable Long userId){
+        return teacherService.updateTeacher(teacherRequest,userId);
+
     }
 }

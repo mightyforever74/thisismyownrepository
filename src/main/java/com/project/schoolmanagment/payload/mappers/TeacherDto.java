@@ -39,6 +39,12 @@ public class TeacherDto {
                 .email(teacher.getEmail())
                 .build();
     }
+    public Teacher mapTeacherRequestToUpdatedTeacher (TeacherRequest teacherRequest, Long id){
+        Teacher teacher=mapTeacherRequestToteacher(teacherRequest);
+        teacher.setId(id);
+        return teacher;
+
+    }
 
 
 }

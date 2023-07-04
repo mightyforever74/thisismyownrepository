@@ -1,8 +1,10 @@
 package com.project.schoolmanagment.controller;
 
 import com.project.schoolmanagment.payload.request.LessonProgramRequest;
+import com.project.schoolmanagment.payload.request.TeacherRequest;
 import com.project.schoolmanagment.payload.response.LessonProgramResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
+import com.project.schoolmanagment.payload.response.TeacherResponse;
 import com.project.schoolmanagment.service.LessonProgramService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -76,6 +78,7 @@ public class LessonProgramController {
         String userName = httpServletRequest.getHeader("username");
         return lessonProgramService.getLessonProgramByTeacher(userName);
     }
+
 
 
 }
