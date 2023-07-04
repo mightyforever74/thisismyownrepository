@@ -11,6 +11,7 @@ import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.TeacherResponse;
 import com.project.schoolmanagment.repository.TeacherRepository;
 import com.project.schoolmanagment.utils.CheckParameterUpdateMethod;
+import com.project.schoolmanagment.utils.CheckSameLessonProgram;
 import com.project.schoolmanagment.utils.Messages;
 import com.project.schoolmanagment.utils.ServiceHelpers;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -42,6 +42,8 @@ public class TeacherService {
     private final PasswordEncoder passwordEncoder;
 
     private final AdvisoryTeacherService advisoryTeacherService;
+
+    private  final CheckSameLessonProgram checkSameLessonProgram;
 
 
     public ResponseMessage<TeacherResponse> saveTeacher(TeacherRequest teacherRequest) {
@@ -149,7 +151,18 @@ public class TeacherService {
 
         Set<LessonProgram> lessonPrograms = lessonProgramService.getLessonProgramById(chooseLessonTeacherRequest.getLessonProgramId());
 
-        Set<LessonProgram>teacherLessonProgram=teacher.getLessonsProgramList();
+        Set<LessonProgram>teachersLessonProgram=teacher.getLessonsProgramList();
+
+        checkSameLessonProgram.checkLessonPrograms(teachersLessonProgram, lessonPrograms);
+        teachersLessonProgram.addAll(lessonPrograms);
+        teacher.setLessonsProgramList(teachersLessonProgram);
+        Teacher updatedTeacher = teacherRepository.save(teacher);
+
+        return  ResponseMessage.<TeacherResponse>builder()
+                .message("Leson Program added to teacher")
+                .httpStatus(HttpStatus.CREATED)
+                .object(teacherDto.mapTeacherToTeacherResponse(updatedTeacher))
+                .build();
 
     }
 
