@@ -7,7 +7,6 @@ import com.project.schoolmanagment.entity.enums.Day;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.Set;
 

@@ -1,10 +1,12 @@
 package com.project.schoolmanagment.service;
 
 import com.project.schoolmanagment.entity.concretes.AdvisoryTeacher;
+import com.project.schoolmanagment.entity.concretes.LessonProgram;
 import com.project.schoolmanagment.entity.concretes.Student;
 import com.project.schoolmanagment.entity.enums.RoleType;
 import com.project.schoolmanagment.exception.ResourceNotFoundException;
 import com.project.schoolmanagment.payload.mappers.StudentDto;
+import com.project.schoolmanagment.payload.request.ChooseLessonProgramWithId;
 import com.project.schoolmanagment.payload.request.StudentRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.StudentResponse;
@@ -21,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -88,6 +91,13 @@ public class StudentService {
                 .orElseThrow(()->
                 new ResourceNotFoundException(String.format(Messages.STUDENT_INFO_NOT_FOUND,studentId)));
     }
+    private Student isStudentsExistByUserName(String username){
+       Student student=studentRepository.findByUsernameEquals(username);
+                if(student.getId()==null) {
+                    throw new ResourceNotFoundException(Messages.NOT_FOUND_USER_MESSAGE);
+                }
+                return student;
+    }
 
     public List<StudentResponse> getAllStudents(){
         return studentRepository.findAll()
@@ -143,6 +153,30 @@ public class StudentService {
     }
     public Student getStudentById(Long id){
         return isStudentsExist(id);
+    }
+    public List<StudentResponse>getAllByAdvisoryUsername(String advisoryTeacherUserName){
+        return studentRepository.getStudentByAdvisoryTeacher_Username(advisoryTeacherUserName)
+                .stream()
+                .map(studentDto::mapStudentToStudentResponse)
+                .collect(Collectors.toList());
+    }
+    public ResponseMessage<StudentResponse>chooseLesson(String username,
+                                                        ChooseLessonProgramWithId chooseLessonProgramWithId){
+        Student student = isStudentsExistByUserName(username);
+        Set<LessonProgram> lessonProgramSet = lessonProgramService.getLessonProgramById(chooseLessonProgramWithId.getLessonProgramId());
+        Set<LessonProgram>studentCurrentLessonProgram = student.getLessonsProgramList();
+        checkSameLessonProgram.checkLessonPrograms(lessonProgramSet,studentCurrentLessonProgram);
+        studentCurrentLessonProgram.addAll(lessonProgramSet);
+        //we are updating the lesson program of the student
+        student.setLessonsProgramList(studentCurrentLessonProgram);
+
+        Student savedStudent = studentRepository.save(student);
+
+        return ResponseMessage.<StudentResponse>builder()
+                .message("Lessons added to student")
+                .object(studentDto.mapStudentToStudentResponse(savedStudent))
+                .httpStatus(HttpStatus.OK)
+                .build();
     }
 
 

@@ -39,19 +39,22 @@ public class LessonProgramService {
 
     private final ServiceHelpers serviceHelpers;
 
-    public ResponseMessage<LessonProgramResponse> saveLessonProgram(LessonProgramRequest lessonProgramRequest) {
+    public ResponseMessage<LessonProgramResponse>saveLessonProgram(LessonProgramRequest lessonProgramRequest){
 
         Set<Lesson> lessons = lessonService.getLessonByLessonIdSet(lessonProgramRequest.getLessonIdList());
 
         EducationTerm educationTerm = educationTermService.getEducationTermById(lessonProgramRequest.getEducationTermId());
 
-        if (lessons.size() == 0) {
+        if(lessons.size()==0){
             throw new ResourceNotFoundException(Messages.NOT_FOUND_LESSON_IN_LIST);
-        } else if (TimeControl.checkTime(lessonProgramRequest.getStartTime(), lessonProgramRequest.getStopTime())) {
-            throw new BadRequestException(Messages.TIME_NOT_VALID_MESSAGE);
         }
+        // old usage
+//		else if (TimeControl.checkTime(lessonProgramRequest.getStartTime(),lessonProgramRequest.getStopTime())) {
+//			throw new BadRequestException(Messages.TIME_NOT_VALID_MESSAGE);
+//		}
+        TimeControl.checkTimeWithException(lessonProgramRequest.getStartTime(),lessonProgramRequest.getStopTime());
 
-        LessonProgram lessonProgram = lessonProgramDto.mapLessonProgramRequestToLessonProgram(lessonProgramRequest, lessons, educationTerm);
+        LessonProgram lessonProgram = lessonProgramDto.mapLessonProgramRequestToLessonProgram(lessonProgramRequest,lessons,educationTerm);
 
         LessonProgram savedLessonProgram = lessonProgramRepository.save(lessonProgram);
 

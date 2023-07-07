@@ -65,5 +65,7 @@ public static final String EDUCATION_START_DATE_IS_EARLIER_THAN_LAST_REGISTRATIO
     public static final String STUDENT_INFO_NOT_FOUND_BY_STUDENT_ID= "Error: Student Info with  student id %d not found" ;
 
 
+    //meet
+    public static final String MEET_NOT_FOUND_MESSAGE = "Error: Meet with id %d not found" ;
 
 }

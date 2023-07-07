@@ -9,6 +9,8 @@ import java.util.Set;
 
 @Component
 public class CheckSameLessonProgram {
+
+
 //TODO we have to validate also old lesson program and new lesson program time schedule matching.
 
     // 09:00 - 12:00

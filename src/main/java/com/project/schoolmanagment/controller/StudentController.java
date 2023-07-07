@@ -1,6 +1,7 @@
 package com.project.schoolmanagment.controller;
 
 import com.project.schoolmanagment.entity.concretes.Student;
+import com.project.schoolmanagment.payload.request.ChooseLessonProgramWithId;
 import com.project.schoolmanagment.payload.request.StudentRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.StudentResponse;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -70,7 +72,21 @@ public class StudentController {
     public Student getStudentById(@RequestParam(name = "id") Long id){
         return studentService.getStudentById(id);
     }
+    //TODO URL of this API is not suitable!!!!
 
+    @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN')")
+    @GetMapping("/getAllByAdvisorId")
+    public List<StudentResponse>getAllByAdvisoryTeacherUsername(HttpServletRequest request){
+        String userName = request.getHeader("username");
+        return studentService.getAllByAdvisoryUsername(userName);
+    }
+    @PreAuthorize("hasAnyAuthority('STUDENT','ADMIN')")
+    @PostMapping("/chooseLesson")
+    public ResponseMessage<StudentResponse>chooseLesson(HttpServletRequest request,
+                                                        @RequestBody @Valid ChooseLessonProgramWithId chooseLessonProgramWithId){
+        String userName = request.getHeader("username");
+        return studentService.chooseLesson(userName,chooseLessonProgramWithId);
+    }
 
 
 }

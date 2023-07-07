@@ -153,18 +153,26 @@ public class TeacherService {
 
         Set<LessonProgram>teachersLessonProgram=teacher.getLessonsProgramList();
 
-        checkSameLessonProgram.checkLessonPrograms(teachersLessonProgram, lessonPrograms);
+        checkSameLessonProgram.checkLessonPrograms(teachersLessonProgram , lessonPrograms);
         teachersLessonProgram.addAll(lessonPrograms);
         teacher.setLessonsProgramList(teachersLessonProgram);
         Teacher updatedTeacher = teacherRepository.save(teacher);
 
         return  ResponseMessage.<TeacherResponse>builder()
-                .message("Leson Program added to teacher")
+                .message("Lesson Program added to teacher")
                 .httpStatus(HttpStatus.CREATED)
                 .object(teacherDto.mapTeacherToTeacherResponse(updatedTeacher))
                 .build();
 
     }
+
+    public Teacher getTeacherByUsername(String username){
+        if(!teacherRepository.existsByUsername(username)){
+            throw new ResourceNotFoundException(Messages.NOT_FOUND_USER_MESSAGE);
+        }
+        return teacherRepository.getTeachersByUsername(username);
+    }
+
 
 
 }
