@@ -82,7 +82,7 @@ public class LessonService {
         }
     }
 
-    Lesson isLessonExistById(Long id){
+     Lesson isLessonExistById(Long id){
         return lessonRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException(String.format(Messages.NOT_FOUND_LESSON_MESSAGE, id)));
     }

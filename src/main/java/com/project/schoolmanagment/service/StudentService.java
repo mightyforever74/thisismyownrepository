@@ -85,7 +85,7 @@ public class StudentService {
                 .build();
 
         }
-    private Student isStudentsExist(Long studentId){
+    public Student isStudentsExist(Long studentId){
         return studentRepository
                 .findById(studentId)
                 .orElseThrow(()->

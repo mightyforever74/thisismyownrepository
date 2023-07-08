@@ -19,8 +19,10 @@ public class StudentInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private Integer absentee;//yoklama
+    /**
+     * number of absentees of the student in the lessons
+     */
+    private Integer absentee;
 
     private Double midtermExam;
 
@@ -30,8 +32,8 @@ public class StudentInfo {
 
     private String infoNote;
 
-    @ManyToOne//bircok ogr bir ogr olsun
-    @JsonIgnoreProperties("teacher")
+    @ManyToOne
+    @JsonIgnore
     private Teacher teacher;
 
     @ManyToOne
@@ -40,14 +42,12 @@ public class StudentInfo {
     @Enumerated(EnumType.STRING)
     private Note letterGrade;
 
-    // lesson   EducationTerm
-
     @ManyToOne
+    @JsonIgnoreProperties("lesson")
     private Lesson lesson;
 
     @OneToOne
     private EducationTerm educationTerm;
-
 
 }
 
