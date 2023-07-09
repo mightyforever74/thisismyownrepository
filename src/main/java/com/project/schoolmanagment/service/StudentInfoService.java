@@ -4,9 +4,9 @@ import com.project.schoolmanagment.entity.concretes.*;
 import com.project.schoolmanagment.entity.enums.Note;
 import com.project.schoolmanagment.exception.ConflictException;
 import com.project.schoolmanagment.exception.ResourceNotFoundException;
-import com.project.schoolmanagment.payload.mappers.StudentDto;
 import com.project.schoolmanagment.payload.mappers.StudentInfoDto;
 import com.project.schoolmanagment.payload.request.StudentInfoRequest;
+import com.project.schoolmanagment.payload.request.UpdateStudentInfoRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.StudentInfoResponse;
 import com.project.schoolmanagment.repository.StudentInfoRepository;
@@ -18,6 +18,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import javax.validation.Valid;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +36,7 @@ public class StudentInfoService {
     @Value("${final.exam.impact.percentage}")
     private Double finalExamPercentage;
 
-    public ResponseMessage<StudentInfoResponse>saveStudentInfo(String teacherUsername, StudentInfoRequest studentInfoRequest) {
+    public ResponseMessage<StudentInfoResponse> saveStudentInfo(String teacherUsername, StudentInfoRequest studentInfoRequest) {
         // we need entity for creation of StudentInfo
         Student student = studentService.isStudentsExist(studentInfoRequest.getStudentId());
         Teacher teacher = teacherService.getTeacherByUsername(teacherUsername);
@@ -67,44 +69,75 @@ public class StudentInfoService {
                 .httpStatus(HttpStatus.OK)
                 .build();
     }
-    private void checkSameLesson(Long studentId,String lessonName){
+
+    public ResponseMessage<StudentInfoResponse> update(@Valid UpdateStudentInfoRequest studentInfoRequest, Long studentInfoId) {
+        Lesson lesson = lessonService.isLessonExistById(studentInfoRequest.getLessonId());
+        StudentInfo studentInfo = isStudentInfoExistById(studentInfoId);
+        EducationTerm educationTerm = educationTermService.getEducationTermById(studentInfoRequest.getEducationTermId());
+
+        Double noteAverage = calculateExamAverage(studentInfo.getMidtermExam(), studentInfo.getFinalExam());
+        Note note = checkLetterGrade(noteAverage);
+        StudentInfo studentInfoForUpdate = studentInfoDto.mapStudentInfoUpdateToStudentInfo(studentInfoRequest,
+                                                        studentInfoId,
+                                                        lesson,
+                                                        educationTerm,
+                                                        note,
+                                                        noteAverage);
+        //TODO move this setters to mapper
+        studentInfoForUpdate.setStudent(studentInfo.getStudent());
+        studentInfoForUpdate.setTeacher(studentInfo.getTeacher());
+        StudentInfo updatedStudentInfo=studentInfoRepository.save(studentInfoForUpdate);
+        return ResponseMessage.<StudentInfoResponse>builder()
+                .message("Stuednt info updated successfully")
+                .httpStatus(HttpStatus.OK)
+                .object(studentInfoDto.mapStudentInfoToStudentInfoResponse(updatedStudentInfo))
+                .build();
+
+    }
+
+    private void checkSameLesson(Long studentId, String lessonName) {
         boolean isLessonDupliucationExist = studentInfoRepository.getAllByStudentId_Id(studentId)
                 .stream()
-                .anyMatch((e)->e.getLesson().getLessonName().equalsIgnoreCase(lessonName));
-        if(isLessonDupliucationExist){
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_LESSON_MESSAGE,lessonName));
+                .anyMatch((e) -> e.getLesson().getLessonName().equalsIgnoreCase(lessonName));
+        if (isLessonDupliucationExist) {
+            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_LESSON_MESSAGE, lessonName));
         }
     }
-    private Double calculateExamAverage(Double midtermExam, Double finalExam){
-        return ((midtermExam* midtermExamPercentage) + (finalExam*finalExamPercentage));
-    }
-    private Note checkLetterGrade(Double average){
 
-        if(average<50.0) {
+    private Double calculateExamAverage(Double midtermExam, Double finalExam) {
+        return ((midtermExam * midtermExamPercentage) + (finalExam * finalExamPercentage));
+    }
+
+    private Note checkLetterGrade(Double average) {
+
+        if (average < 50.0) {
             return Note.FF;
-        } else if (average>=50.0 && average<55) {
+        } else if (average >= 50.0 && average < 55) {
             return Note.DD;
-        } else if (average>=55.0 && average<60) {
+        } else if (average >= 55.0 && average < 60) {
             return Note.DC;
-        } else if (average>=60.0 && average<65) {
+        } else if (average >= 60.0 && average < 65) {
             return Note.CC;
-        } else if (average>=65.0 && average<70) {
+        } else if (average >= 65.0 && average < 70) {
             return Note.CB;
-        } else if (average>=70.0 && average<75) {
+        } else if (average >= 70.0 && average < 75) {
             return Note.BB;
-        } else if (average>=75.0 && average<80) {
+        } else if (average >= 75.0 && average < 80) {
             return Note.BA;
         } else {
             return Note.AA;
         }
     }
-    public ResponseMessage deleteStudentInfo(Long studentInfoId){StudentInfo studentInfo = isStudentInfoExistById(studentInfoId);
+
+    public ResponseMessage deleteStudentInfo(Long studentInfoId) {
+        StudentInfo studentInfo = isStudentInfoExistById(studentInfoId);
         studentInfoRepository.deleteById(studentInfo.getId());
 
         return ResponseMessage.builder()
                 .message("Student Info deleted Successfully")
                 .httpStatus(HttpStatus.OK)
-                .build();}
+                .build();
+    }
 
     public StudentInfo isStudentInfoExistById(Long id) {
         boolean isExist = studentInfoRepository.existsByIdEquals(id);
@@ -114,9 +147,11 @@ public class StudentInfoService {
             return studentInfoRepository.findById(id).get();
         }
     }
-    public Page<StudentInfoResponse> search(int page, int size, String sort, String type){
+
+    public Page<StudentInfoResponse> search(int page, int size, String sort, String type) {
         Pageable pageable = serviceHelpers.getPageableWithProperties(page, size, sort, type);
         return studentInfoRepository.findAll(pageable).map(studentInfoDto::mapStudentInfoToStudentInfoResponse);
     }
+
 
 }

@@ -1,10 +1,12 @@
 package com.project.schoolmanagment.controller;
 
 import com.project.schoolmanagment.payload.request.StudentInfoRequest;
+import com.project.schoolmanagment.payload.request.UpdateStudentInfoRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.StudentInfoResponse;
 import com.project.schoolmanagment.service.StudentInfoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,5 +34,20 @@ public class StudentInfoController {
     public ResponseMessage delete (@PathVariable Long studentInfoId){
         return studentInfoService.deleteStudentInfo(studentInfoId);
     }
-
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @GetMapping("/search")
+    public Page<StudentInfoResponse> search(
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size,
+            @RequestParam(value = "sort") String sort,
+            @RequestParam(value = "type") String type
+    ) {
+        return studentInfoService.search(page, size, sort, type);
+    }
+    @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER')")
+    @PutMapping("/update/{studentInfo}")
+    public ResponseMessage<StudentInfoResponse>update(@RequestBody @Valid UpdateStudentInfoRequest studentInfoRequest,
+                                                      @PathVariable Long studentInfo){
+        return studentInfoService.update(studentInfoRequest,studentInfo);
+    }
 }

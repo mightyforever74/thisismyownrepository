@@ -1,8 +1,11 @@
 package com.project.schoolmanagment.payload.mappers;
 
+import com.project.schoolmanagment.entity.concretes.EducationTerm;
+import com.project.schoolmanagment.entity.concretes.Lesson;
 import com.project.schoolmanagment.entity.concretes.StudentInfo;
 import com.project.schoolmanagment.entity.enums.Note;
 import com.project.schoolmanagment.payload.request.StudentInfoRequest;
+import com.project.schoolmanagment.payload.request.UpdateStudentInfoRequest;
 import com.project.schoolmanagment.payload.response.StudentInfoResponse;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,27 @@ public class StudentInfoDto {
                 .absentee(studentInfoRequest.getAbsentee())
                 .midtermExam(studentInfoRequest.getMidtermExam())
                 .finalExam(studentInfoRequest.getFinalExam())
+                .examAverage(average)
+                .letterGrade(note)
+                .build();
+    }
+
+
+    //TODO refactor this method by using mapStudentInfoRequestToStudentInfo if possible.
+    public StudentInfo mapStudentInfoUpdateToStudentInfo(UpdateStudentInfoRequest studentInfoRequest,
+                                                         Long studentInfoRequestId,
+                                                         Lesson lesson,
+                                                         EducationTerm educationTerm,
+                                                         Note note,
+                                                         Double average){
+        return StudentInfo.builder()
+                .id(studentInfoRequestId)
+                .infoNote(studentInfoRequest.getInfoNote())
+                .midtermExam(studentInfoRequest.getMidtermExam())
+                .finalExam(studentInfoRequest.getFinalExam())
+                .absentee(studentInfoRequest.getAbsentee())
+                .lesson(lesson)
+                .educationTerm(educationTerm)
                 .examAverage(average)
                 .letterGrade(note)
                 .build();
